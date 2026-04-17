@@ -3,6 +3,12 @@
 
 ## Swift Basics
 
+print("Hello World!")
+
+
+
+
+
 ## Swift Types & Functions
 ## Swift Object Model
 ## Swift Robustness & Async
