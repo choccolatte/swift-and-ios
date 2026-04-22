@@ -48,6 +48,23 @@
 	 print("pi = \(pi), count = \(count)")
 	 `
 
+	 - Note: unlike some other coding languages, in Swift, `let` is used for constants and `var` for variables.
+
+	 - ex explained -
+	 	- `let` creates an immutable(unchangable) constant; while `var` creates a mutable(changable) variable.
+		- Type annotation is optional; here, we annotate `Double` and `Int`. Type annotation is var count: Int - where we declare the data type the variable is expecting.
+		- String interpolation: \(expr) - inserts values into strings.
+
+
+#### String Interpolation
+
+- String Interpolation is a way to embed expressions inside string literals for formatting.
+- In Swift, String interpolation is done using - `\(expr)`.
+- the most common and simple way to use string interpolation is to embed variable names inside string literals.
+
+
+
+
 
 
 ### Statements
