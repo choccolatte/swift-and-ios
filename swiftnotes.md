@@ -62,6 +62,46 @@
 - In Swift, String interpolation is done using - `\(expr)`.
 - the most common and simple way to use string interpolation is to embed variable names inside string literals.
 
+- ex - 
+`
+let greeting = "Hello"
+var name = "World"
+print("\(greeting), \(name)")
+`
+
+
+#### Functions
+
+- Functions are blocks of code that performs a specific task.
+- Syntax - `func name (parameter: Type) -> Return`, call as `name(parameter)`.
+
+- ex -
+`
+func add(_ a: Int, _ b: Int) -> Int {
+	return a + b
+}
+
+print(add(5, 2)) // 10
+`
+
+- this example defines `add` with two `Int` parameters and returns their sum as `Int`.
+
+:::note
+
+- here _ is the external parameter name - which is used when a function is called - like - add(5, 2) - since here the external parameter names was blank.
+- If there was an external parameter names here - add(one a : Int, two b : Int){} - when called, it would look like this - add(one: 5, two: 2)
+
+:::
+
+### Statements
+
+
+
+
+#### Functions
+#### Functions
+#### Functions
+
 
 
 
