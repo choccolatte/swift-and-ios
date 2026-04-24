@@ -93,12 +93,84 @@ print(add(5, 2)) // 10
 
 :::
 
+
+
 ### Statements
 
+swift code is built from statements like declarations, expressions, and control flow (if, switch, loops).
+
+#### Expression & Declaration Statements
+
+- Declarations introduce names (like variables and constants).
+- Expressions statements evaluate an expressioins, such as a function call.
+
+- ex -
+`
+let x = 2 // declaration
+print(x) // expression statement
+`
+
+- this example shows a constant declaration and an expression statement that prints its value.
 
 
+#### Semicolons and Blocks
 
-#### Functions
+- Semicolons are optional at line ends -- use them only to seperate multiple statements on one line.
+- Braces group statements into a block.
+
+- ex - `
+
+let a = 1; let b = 2 // semicolons (;) can seperate multiple statements on one line
+print(a + b)
+
+if a < b {
+	print("a is less than b")
+}
+`
+
+- Swift does not require semicolons at the end of each line like Java or C.
+- use them only when writing more than one statement on the same line.
+- Braces `{...}` form blocks that group statements.
+
+
+### Text Output
+
+- Use `print()` to write text and values to output.
+- use string interpolations to combine values.
+
+#### Print Text
+
+- Use `print()` to write text.
+- Interpolate values with `\(expr)`. 
+
+- ex -`
+print("Hello World!")
+let name = "John"
+print("Hello \(name)")
+
+let a = 2, b = 5
+print("Total: \(a + b)")
+`
+
+- this example above prints text adn uses string interpolations to include values.
+
+#### Print Without Newline
+
+- Use the `terminator` parameter to avoid a trailing newline.
+- ex -`
+for n in 1...3{
+	print(n, terminator: " ") // prints on one line
+}
+`
+
+- this example prints numbers on a single line by setting `terminator` to a space.
+
+- Tip: `print()` ends with a newline. Pass `terminator: " "` to avoid a newline.
+  
+
+#### Number Output
+
+
 #### Functions
 #### Functions
 
