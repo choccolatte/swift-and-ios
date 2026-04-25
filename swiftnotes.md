@@ -443,14 +443,162 @@ print("Hello, \(name)")
 
 ### Data Types
 
-- 
+- Swift comes with these built-in data types 
+	- `Int`
+	- `Double`
+	- `Bool`
+	- `String`
+
+- Swift uses type inference to deduce the type from the value.
+
+##### Basic Types
+
+- we declare constant types with `let` and variables with `var` as mentioned before.
+- Swift infers the data type from the initial value you assign to it if the data is not inferred manually.
+
+- ex.- 
+`
+let anInt = 12 // Int
+let aDouble = 23.33 // Double
+let isthisSwift = true // Bool
+let greet = "Hello" // String
+
+print(anInt)
+print(aDouble)
+print(isthisSwift)
+print(greet)
+`
+
+
+##### Type Inference vs Annotation
+
+- Swift usually infers the type from the initial value assigneed to the variable, but you also also explicitly assign the data type manually for clarity.
+
+- ex. -
+`
+let inferred = 30 // Int (inferred)
+let annotated: Double = 3.14 // Double (explicit)
+
+print(type(of: inferred), type(of: annotated))
+`
+
 
 #### Numbers
+
+- In numerical data types, Swift has integer types (like `Int`) and floating-point types (like `Double`).
+- USe arithmetic operators to add, subtract, multiply and divide numbers.
+
+##### Arithmetic
+
+- Use `+`, `-`, `*`, and `/` to perform numeric operations. You can also convert types whenever needed.
+
+- ex -
+`
+let a = 5, b = 10
+print(b - a)
+priont(a * b)
+print(Double(b) / Double(a)) // type conversion of Int to Double
+`
+
+##### Integer Division vs Remainder
+
+- Integer division drops any factorial part, while `%` returns the remainder.
+- ex -
+`
+let a = 7, b = 3
+print(a / b) // 2 (integer division)
+print(a % b) // 1 (remainder - modulous division)
+`
+
+- the above example shows how integer division truncates zero and how teh remainder operator `%` returns the leftover remainder after the division.
+
+
 #### Booleans
+
+- the data type `Bool` represents the logical true/false.
+- Combine `Bool` with conditions, or conditions with AND (`&&`), OR (`||`), and negate with NOT (`!`).
+
+- ex. - here, we see an example that shows logical AND, OR, and NOT.
+`
+let a = true, b = false
+print(a && b) // a AND b
+print(a || b) // a OR b
+print(!a) // prints b - since NOT a means anything but a = b
+`
+
+
+##### Comparison Results
+
+- Relational operators like `>`, `==` and `!=` return bool data typevalues that you can use in conditions.
+
+- ex. -
+`
+let a = 5, b = 3
+print(a > b) // true
+print(a == b) // false
+print(a != b) // true - since a NOT equal b is true since 5 is not equal to 3
+`
+
+
 #### Characters
+
+- In Swift, `Character` data type is one user-variable character, or just a single character like a or A and so on.
+- Strings are collections of characters.
+
+
+##### Characters and String Length
+
+- Use `Character` for single letters.
+- Use `String.count` to get the number of characters.
+
+- ex. - here, we see an example that prints a character and a string length.
+`
+let ch: Character = "A"
+print(ch)
+
+let word = "World"
+print(word.count) // String.count is String's value.count
+`
+
+
+##### Characters and String Conversion
+
+- You can convert between `Character` and `String` as your code requires.
+
+- ex. -
+`
+let ch: Character = "A"
+let s = String(ch)
+
+print(s) // "A" - its a String now where A was a Character before
+`
+
+##### Unicode and Grapheme Clusters
+
+- Some characters use multiple Unicode scalars but still count as one character.
+
+- ex. -
+`
+let Heart: Character = "💘"
+print(heart)
+
+let flag: Character = "No" // composed of two regional indicators
+
+print(flag)
+print("e\u{301}".count) // 1 (e + combining acute accent)
+`
 
 
 ### Type Casting
+
+
+#### UpCasting and DownCasting
+#### Forced DownCasting
+
+
+
+
+
 ### Operators
 ### Operators
 ### Strings
