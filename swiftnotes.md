@@ -694,11 +694,54 @@ print(10 5 6) // 4
 
 ##### Compound Assignment
 
-- 
+- use compound operators like `+=` and `*=` to update a variable in place.
+
+- ex. - here, this example shows updating a variable with compound assignment operators.
+`
+var total = 100
+total += 50
+print(total)
+
+total -= 30
+print(total)
+
+total *= 20
+print(total)
+
+total /= 40
+print(total)
+`
+
+##### Append to String
+
+- You can also use `+=` with strings to append text to a mutable string variable.
+
+- ex - in this example, we append to a string in place with `+=`
+`
+var s = "Hello"
+s += "World!"
+
+print(s)
+`
+
 
 #### Comparison Operators
+
+// contd 
+
+##### Compare Integers
+##### Compare Strings
+
+
+
 #### Logical Operators
+##### Logical Operators
+##### Logical Operators
+
+
 #### Operator Precedence
+##### Logical Operators
+##### Logical Operators
 
 
 
