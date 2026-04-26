@@ -591,15 +591,117 @@ print("e\u{301}".count) // 1 (e + combining acute accent)
 
 ### Type Casting
 
+- to use Type Casting, we can use `as`, `as?` and `as!` to convert between data types, especially with protocols and `Any`.
 
 #### UpCasting and DownCasting
+
+- Convert a value to a supertype (upcast) or attempt to convert back to a subtype using optional downcasting with `as?`.
+
+- ex - here, we see an example that conditionlly casts values from `Any` to their concrete types -
+`
+let items: [Any] = [1, "Swift"]
+for item in items{
+	if let i = item as? Int{
+		print("Int: \(i)")
+	} else if let s = item as? String {
+		print("String: \(s)")
+	}
+}
+`
+
 #### Forced DownCasting
 
+- you can use `as!` only when you are certain of the runtime type. If the cast fails, the program will crash.
+- prefer optional casting (`as?`) when the type may vary, and unwrap safely.
 
-
+- ex - 
+`
+let value: Any = 50
+let i = value as! Int // forced downcast
+print(i)
+`
 
 
 ### Operators
+
+- We can use Operators to perform operations on values.
+- Common groups are - arithmetic, assignment, comparison, and logical operators.
+- Swift also has well-defined operator precedence.
+
+- here we explore arithmetic, assignment, comparison, and logical operators - and how precedence affects evaluation order.
+
+- ex - here, in this example we see Arithmetic(`+`), Comparison(`>`) and Logical(`&&`, `!`) operators.
+`
+let a = 5, b = 2
+
+// arithmetic
+print(a + b)
+
+// comparison
+print(a > b)
+
+// logical
+let t = true, f = false
+print(t && !f)
+`
+
+#### Unary and Ternary
+
+- Unary operators act on a single operand (like `!` to negate a boolean.)
+- The ternary conditional operator `condition ? a : b` chooses between two values.
+
+- ex. - here, in this example we flip a boolean with a unary `!` and use the ternary operator to pick a string based on a condition.
+`
+let flag = false
+print(!flag) // since flag is false, we are using unary - !, so it will print true here.
+
+let score = 90
+let label = (score >= 90) ? "A" : "Not A" // Ternary condition
+print(label)
+`
+
+
+#### Arithmetic Operators
+
+- In Arithmetic operators, we use `+`, `-`, `*` and `/` to add, subtract, multiply and divide.
+- Integer division truncates toward zero.
+
+- ex. - these examples show addition, subtraction, multiplication, and integer division - and this example also demonstrates arithmetic with integers.
+`
+let a = 10, b 20
+print(a - b)
+print(a * b)
+print(a / b) // this is integer division
+`
+
+##### Remainder Operator
+
+- The remainder operator `%` gives the leftover after integer division.
+- ex. -
+`
+print(7 % 3) // 1
+print(8 % 2) // 0
+print(10 5 6) // 4
+`
+
+- use `%` to check divisibility or cycle through a fixed range.
+
+
+#### Assignment Operators
+
+- Use `=` to assign a value to a variable.
+- Compound assignment operators like `+=`, `-=`, `*=` and `/=` update a variable in place.
+
+##### Compound Assignment
+
+- 
+
+#### Comparison Operators
+#### Logical Operators
+#### Operator Precedence
+
+
+
 ### Operators
 ### Strings
 ### Arrays
