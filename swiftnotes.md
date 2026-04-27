@@ -727,14 +727,41 @@ print(s)
 
 #### Comparison Operators
 
-// contd 
+- it is used to compare values: `==`, `!=`, `>`, `<`, `>=`, `<=`.
+- When using comparion operators, they return `Bool`.
 
 ##### Compare Integers
+
+- Use Comparison operators - `==`, `!=`, `>`, `<`, `>=`, `<=` to compare numeric values.
+- Whatever you use to comapre two things, the result will be a `Bool`.
+
+- ex. - here, this example prints the results of several comparisons.
+`
+let a = 5, b = 10
+print(a == b)
+print(a != b)
+print(a > b)
+print(a < b)
+print(a >= 5)
+`
+
 ##### Compare Strings
 
+- Strings compare lexicographically (in a dictionary order).
+- Comparison is case-sensitive.
+
+- ex. - this example compares strings using the same operators.
+`
+print("apple" < "banana") // true
+print("World" == "World") // true
+print("apple" > "apricot") // false
+`
 
 
 #### Logical Operators
+
+- 
+
 ##### Logical Operators
 ##### Logical Operators
 
@@ -745,9 +772,23 @@ print(s)
 
 
 
-### Operators
+
 ### Strings
+#### Concatenation
+#### Numbers and Strings
+#### Special Characters
+#### Unicode & Scalars
+
+
+
 ### Arrays
+#### Loop THrough an Array
+#### Array Slices
+#### Indices & Bounds
+#### Multidimensional Arrays
+#### Real-Life Examples
+
+
 ### Ranges
 ### If...Else
 ### Switch
