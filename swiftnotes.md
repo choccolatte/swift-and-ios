@@ -760,21 +760,148 @@ print("apple" > "apricot") // false
 
 #### Logical Operators
 
-- 
+- You can combine booleans with `&&` (AND), `||` (OR), and `!` (NOT).
 
-##### Logical Operators
-##### Logical Operators
+##### Logical AND (&&)
+
+- both conditions must be `true` for the result to be `true`.
+- ex. -
+`
+let isOwner = true
+let isAdmin = false
+
+print(isOwner && isAdmin)
+print(true && true)
+`
+
+##### Logical OR (||)
+
+- At least one `true` makes the result `true` - meaning, one of the two conditions must be true for the statement to be true.
+
+- ex. -
+`
+let a = true
+let b = false
+
+print(a || b)
+print(false || false)
+`
+
+##### Logical NOT (!)
+
+- it flips a boolean value - `true` becomes `fasle` and vice versa.
+
+- ex. -
+`
+let flag = false
+print(!flag) // prints true
+print(!true) // prints false
+`
 
 
 #### Operator Precedence
-##### Logical Operators
-##### Logical Operators
+
+- Operator precedence determines evaluation order.
+- Multiplication comes before addition, `&&` before `||`.
+- Also, use parantheses to control order - conditions/items in the parantheses will solve/run first.
 
 
+##### Control order of evaluation with precedence
+
+- understand how operators are prioritized and add parantheses to make evaluation order explicit when needed.
+- Think of this like basic math rules you already know. When you write an expression with multiple operations, not everything is done left to right—some operations have higher priority than others. This is called operator precedence.
+- Like - 2 + 3 × 4
+- You might think - (2 + 3) × 4 = 20
+- But actually, multiplication happens first: 2 + (3 × 4) = 14
+
+- Why parentheses help
+- Parentheses let you control the order explicitly (clearly and directly stated, leaving no room for guessing), so there’s no confusion.
+- Default behavior - 2 + 3 × 4 = 14
+- With parantheses - (2 + 3) × 4 = 20
+
+- ex - this example here shows you how parantheses changes the result -
+`
+print(2 + 3 * 4)
+print((2 + 3) * 4)
+print(true || false && false)
+print((true || false) && false)
+`
+
+##### Boolean Precedence
+
+- `&&` is evaluated before `||`. Use Parantheses to clarify intention.
+
+- ex. -
+`
+let a = true
+let b = false
+let c = true
+
+print(a || b && c) // true (&& before ||)
+print((a || b) && c) // true 
+print(a && b || c) // true ((a && b) || c)
+`
 
 
 ### Strings
+
+- Strings are basically text.
+- Use `+` to join, interpolation with `\(Value)` to insert values, and properties like `count` and `isEmpty` to inspect them.
+
+#### Basics
+
+- create, combine and inspect strings with concatenation, interpolation, and common properties.
+
+- ex - here, our example shows concatenation, interpolation, `count` and `isEmpty` attribute.
+`
+let s1 = "Hello"
+let s2 = "World!"
+
+print(s1 + " " + s2) // string conccatenation
+print("\(s1), \(s2)") // stringinterpolation
+
+let word = "John"
+print(word.count) // count attribute of String
+print(s1.isEmpty) // false - because s1 has a value
+`
+
+#### Substring and Case
+
+- get String's substrings with indices. 
+- Uppercased/lowercased creates new strings without changing the original.
+- ex. -
+`
+let text = "World!"
+let start = text.startIndex
+let end = text.index(start, offsetBy: 3)
+let sub = text[start..<end] // Wor
+
+print(sub)
+print(text.uppercased())
+`
+
+- here, the `..<` is the ..< operator, and it mean → exclude the end. Whereas, the opposite of it is the `...` operator, which mean → include the end.
+
+
 #### Concatenation
+
+- Concatenation means to join strings with `+`, or use interpolation to insert values into a string.
+
+- You can also use `+` to make a new string. When you use interpolation to insert values in a string, it'll insert the values inline - without linebreak or new line.
+- Note that, Interpolation is often clearer when mixing text and values.
+
+- ex - 
+`
+let first = "Hello"
+let second = "World!"
+
+// Concatenation
+print(first + " " + second)
+
+// Interpolation
+print("\(first), \(second)")
+`
+
 #### Numbers and Strings
 #### Special Characters
 #### Unicode & Scalars
