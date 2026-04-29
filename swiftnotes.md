@@ -1019,7 +1019,113 @@ for scalar in s.unicodeScalars{
 
 
 ### Arrays
+
+- arrays store ordered collection of values/data of the same type.
+- Arrays are value types and copy on write.
+
+- basically it's saying - “Arrays are value types” - here, a value type mean - When you assign it to another variable, you get a separate copy, not a shared object.
+
+- Ex:
+`
+var a = [1, 2, 3]
+var b = a
+`
+
+- here, it might look like a and b are the same—but conceptually:
+	- a has its own data - array 1
+	- b has its own data - pointing to array 1 till b's array's value changes
+
+- now, if we add a value to one of these array :
+
+`b.append(4)`
+
+- it'll lead to - 
+`
+a = [1, 2, 3]
+b = [1, 2, 3, 4]
+`
+
+- It shows that changing b does not affect a.
+
+- The other thing - “Copy on write” means - Swift does NOT immediately makes a full copy when you do - `var b = a`.
+- Instead, both a and b temporarily share the same data in memory, Swift waits until one of them is modified,then it creates a new array for the modified variable's array. When that happens, only then does it make a real copy.
+
+- So if - 
+`
+var a = [1, 2, 3]
+var b = a   // no real copy yet (shared behind the scenes)
+`
+
+- Then we do:
+`b.append(4)`
+
+- Now Swift says: “Oh, you're modifying b, I need to protect a.”
+
+- So it - creates a copy for b and then modifies b.
+
+- So ultimately, Arrays behave like independent copies, but Swift delays actually copying them until one is changed to save memory and speed things up.
+
+
+#### Create and Access
+
+- You can create arrays using two ways - literals and initializers.
+- A literal here mean you directly write the values of the array inside square brackets - LITERALLY
+
+- ex of literals -
+`
+let nums = [1, 2, 3]
+let names = ["John", "Joe"]
+
+`
+
+- On the other hand, initializers are special method used to create an array, often when you need more control over it.
+
+- ex of initializers -
+`
+// empty array
+let nums = [Int]() // it will take int values only
+
+// array with repeated values
+let zeroes = Array(repeating: 0, count: 5) // [0, 0, 0, 0, 0]
+`
+
+- And you can access array's elements by their index numbers and use properties like `count` and `isEmpty` on them.
+
+- ex. - here, our example creates an array, access its items, appends elements to it and inspects its properties.
+`
+var nums = [1, 2, 3]
+print(nums[0]) // 1
+
+nums.append(10)
+print(nums.count) // 4
+print(nums.isEmpty) // false
+`
+
+- Tip: Arrays are value types. 
+	- Mutating a copy will not affect the original copy (copy-on-write semantics.)
+
+
+#### Create and Access
+
+- You can modify arrays by inserting and removing elements from them.
+
+- ex. -
+`
+var items = ["A", "B", "C"]
+items.insert("X", at: 1)
+print(items)
+
+items.remove(at: 2)
+print(items)
+`
+
+
 #### Loop THrough an Array
+
+
+##### Create and Access
+
+
 #### Array Slices
 #### Indices & Bounds
 #### Multidimensional Arrays
