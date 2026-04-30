@@ -1120,13 +1120,103 @@ print(items)
 `
 
 
-#### Loop THrough an Array
+#### Loop Through an Array
 
+- You can use `for-in` to loop values.
+- You can also use `enumerated()` for index and value.
 
-##### Create and Access
+- To loop through an Array's elements/values, you can use `for-in` or you can use `enumerated()` when looping through index and values.
+
+- ex. - here, we use for-in loop. We also use enumerated() to get the array's index and values.
+`
+let fruits = ["Apple", "Banana", "Cherry"]
+for fruit in fruits{
+	print(fruit)
+}
+
+for (i, fruit) in fruits.enumerated(){
+	print("\(i): \(fruit)")
+}
+`
+
+##### forEach
+
+- You can use `forEach` for a functional style loop. It reads the array's values but it cannot use `break/continue`.
+
+- ex - 
+`
+let fruits = ["Apple", "Banana", "Cherry"]
+fruits.forEach { print($0) }
+fruits.enumerated().forEach{ print("\($0.offset): \($0.element) ") }
+`
+
+- here, in this line - fruits.forEach{ print($0) } mean -
+
+	- forEach means: do something with every item in the array
+	- { ... } is a closure (a small block of code)
+	- $0 means: the current item
+
+	- So, its basically saying - for each fruit in fruits -> print it
+
+- on the other hand, this line - fruits.enumerated().forEach { print("\($0.offset): \($0.element) ") } mean -
+	
+	- here, we add index numbers to out array items.
+	- enumerated() - turns the array into pairs like (0, "Apple"), (1, "Banana"), (2, "Cherry")
+	- Each item now has - offset -> the index (0, 1, 2)
+	- element -> the value ("Apple", etc.)
+
+	- inside the loop -
+		$0.offset // index
+		$0.element // actual fruit
+	
+	- so ths line prints -
+		0: Apple
+		1: Banana
+		2: Cherry
+	
+	- so basically, $0 - means the current item of the loop
+	- `enumerated()` - gives you the index + value together
+
 
 
 #### Array Slices
+
+
+- You can use ranges to create slices of arrays.
+- A range is a half-open interval, meaning, it includes the lower bound (starting point) but excludes the upper bound (end point).
+- A slice is a view of an array that shares storage with the base array, meaning is is a reference to a portion of the array.
+- When you modify a slice, the base array is also modified.
+
+
+##### Slicing an Array - ArraySlice
+
+- create an `ArraySlice` with a range on an array.
+- You can also Convert to `Array` if you need its own storage.
+
+- ex. -
+`
+let nums = [1, 2, 3, 4, 5, 6, 7, 8]
+let mid = nums[1...4] // ArraySlice<Int>
+print(mid) // [2, 3, 4, 5]
+
+let copy = Array(mid) // Array<Int>
+print(copy) 
+`
+
+- or, you can also use a half-open range to exclude the upper bound.
+
+- ex -
+`
+let nums = [1, 2, 3, 4, 5, 6, 7]
+let slice = nums[1..<3] // indices 1 and 2 only
+print(slice)
+`
+
+- slices shares storage with the base array until you copy the slice -> Then it becomes its own array at a new location.
+
+- Tip: Slices keep original indices.
+	- Convert to `Array` for zero-based indices.
+
 #### Indices & Bounds
 #### Multidimensional Arrays
 #### Real-Life Examples
