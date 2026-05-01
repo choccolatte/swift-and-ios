@@ -1217,9 +1217,145 @@ print(slice)
 - Tip: Slices keep original indices.
 	- Convert to `Array` for zero-based indices.
 
+
+##### One-Sided Slices
+
+- you can use one-sided ranges to slice from the start or to the end.
+
+- ex. -
+`
+let arr = [0, 1, 2, 3, 4, 5]
+print(arr[...2]) // first three elements (0...2)
+print(arr[2...]) // from index 2 to the end
+`
+
+
 #### Indices & Bounds
+
+- Arrays have `startIndex` and `endIndex` (one past last).
+- You can use `indices` to loop valid positions.
+- Note that, Out of bounds access crashes at runtime.
+
+##### Valid Indices
+
+- You can use `indices` to visit only valid positions.
+
+- ex. -
+`
+let items = [1, 2, 3]
+print(items.startIndex) // 0
+
+for i in items.indices{
+	print("index: \(i), value: \(items[i])")
+}
+`
+
+- valid subscript indices: `0..<items.count` (zero up to, not including count).
+
+- ex. -
+`
+let items = [1, 2, 3]
+print(items[0]) // OK
+// print(items[3]) // out of bounds
+`
+
+- Use `indices` for index-and-value access without `enumerated()`.
+
+- Note: `endIndex` is not a valid subscript. The last valid index is `items.index(before: items.endIndex)`.
+
+
+##### Last Valid Index
+
+- You can get the last valid index with `index(before: endIndex)`.
+
+- ex -
+`
+let items = [1, 2, 30]
+let lastIndex = items.index(before: items.endIndex)
+print(lastIndex) // 2
+print(items[lastIndex]) // 30
+`
+
+
 #### Multidimensional Arrays
+
+- You can use nested arrays to represent 2D (or higher) structures such as matrices and grids.
+
+##### 2D Arrays
+
+- You can store rows as arrays inside and outer array, then, index as grid[row][col] to access items.
+
+- ex. -
+`
+var grid = [
+	[1, 2, 3],
+	[4, 5, 6],
+	[7, 8, 9]
+]
+
+print(grid[0][1]) // 2
+for row in grid{
+	print(row)
+}
+`
+
+##### Update a Cell
+
+- You can change a value by indexing into the specific row and column.
+
+- ex. -
+`
+var grid = [
+	[1, 2, 3],
+	[4, 5, 6],
+	[7, 8, 9]
+]
+
+grid[1][1] = 50
+print(grid[1]) // [4, 50, 6]
+print(grid[1][1]) // 50
+`
+
+
 #### Real-Life Examples
+
+- Arrays are everywhere - rendering lists, aggregating values, finding items, and transforming data.
+
+##### Aggregate and Transform
+
+- Here, we use `filter`, `map`, and `reduce` to process arrays declaratively.
+
+- ex. -
+`
+let scores = [50, 44, 56, 76, 87, 98]
+let passed = scores.filter{ $0 >= 75 }
+let curved = passed.map{ $0 + 5 }
+let average = curved.reduce(0, +) / curved.count
+
+print(passed)
+print(curved)
+print("Average: \(average)")
+`
+
+- Filter to keep passing sources, map to apply a curve, then, reduce to compute an average.
+
+- Tip: Prefer declarative iteration for clarity and fewer bugs.
+
+
+##### Search & Index
+
+- Check for membership and find the index of a value.
+
+- ex. -
+`
+let names = ["Kai", "John", "Joe"]
+print(names.contains("John")) // true
+
+if let i = names.firstIndex(of: "Joe"){
+	print(i) // 2
+}
+`
+
 
 
 ### Ranges
