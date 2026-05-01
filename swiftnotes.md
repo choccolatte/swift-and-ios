@@ -943,12 +943,40 @@ print("Pi: \(pi))
 `
 let s1 =  "123"
 let n1 = Int(s1) // Int?
-print(n1 ?? 0)
+print(n1 ?? 0) // it says, to print value of n1 if there's value in n1, else print 0. - just a simple if...else clause
 
 let s2 = "abc"
 let n2 = Int(s2) // nil (not a number)
 print(n2 == nil)
 `
+
+- here, "123" is a string, which we try to covnert to a number/Int with Int(s1).
+	- print(n1 ?? 0) - here, ?? is the nil-coalescing operator - which basically means - If this value is nil(0), use a default instead.
+
+	- the idea is - value ?? defaultValue 
+	- if value is not nil -> use it
+	- if value is nil -> use defaultValue
+
+	- for ex. - `let name: String? = nil`
+	- `let displayName = name ?? "Guest"`
+	- but since name is nil, this becomes -
+	- `displayName = "Guest"` - here, Guest is the defaultValue
+
+	- without ??, we'd have to write a much longer if...else clause and conditions. But with ??, we can simply write - `print(score ?? 0)`
+	- So, in simple terms, the nil-coalescing operator is a shortcut for providing a fallback value when something is missing(nil).
+
+	- continuing with the above example - `n1 = Optional(123)`
+	- Notice Int(s1) returns Int? - an optional. That means, it might contain a number or a nil.
+
+	- Second part of the example is -
+	- let s2 = "abc"
+	- let n2 = Int(s2) // nil(not a number)
+	- print(n2 == nil)
+
+	- here, s2 is 'abc', which is not a number
+	- Int(s2) fails -> so: `n2 = nil`
+	- Then, `print(n2 == nil)` - this checks whether n2 is nil. Since it is, so it prints - true.
+
 
 
 #### Special Characters
@@ -1359,10 +1387,66 @@ if let i = names.firstIndex(of: "Joe"){
 
 
 ### Ranges
+
+- You can use ranges to express a sequence of values.
+- `a...b` is a closed range including both ends - it includes both ends.
+- `a..<b` is a half-open range up to but not including the end - `b`.
+
+
+#### Closed and Half-Open
+
+- Use `a...b` for closed ranges (inclusive) and `a..<b` for half-open ranges (exclusive upper bound).
+
+- ex. - this example here iterates over closed and half-open ranges and checks membership with `contains()`.
+`
+for n in 1...5{
+	print(n) // 1, 2, 3, 4, 5
+}
+	for n in 1..<5{
+		print(n) // 1, 2, 3, 4
+	}
+	let r = 10...12
+	print(r.contains(11)) // true
+	print(r.contains(13)) // false
+`
+
+#### One-Sided Ranges
+
+- one sided ranges omit one end: `...b` starts from the beginning, and `a...` goes till the end.
+
+- ex. - this example slices an array using one sides ranges: upto and including index `2`, and from index `2` to the end.
+`
+let arr = [0, 1, 2, 3, 4, 5]
+print(arr[...2]) // first 3 elements (indices 0...2)
+print(arr[2...]) // from index 2 to the end
+`
+
+
 ### If...Else
+#### If
+#### Else
+#### Else If
+#### Short Hand If...Else
+#### Nested If
+#### Logical Operators
+#### Real Life Examples
+
+
+
 ### Switch
+
+
 ### While Loop
+#### Repeat/While Loop
+#### Real Life Examples
+
+
 ### For Loop
+#### Nested Loops
+#### For-Each Loop
+#### Real-Life Examples
+
+
 ### Break/Continue
 ### Collections
 
