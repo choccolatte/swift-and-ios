@@ -1385,7 +1385,6 @@ if let i = names.firstIndex(of: "Joe"){
 `
 
 
-
 ### Ranges
 
 - You can use ranges to express a sequence of values.
@@ -1423,6 +1422,34 @@ print(arr[2...]) // from index 2 to the end
 
 
 ### If...Else
+
+- You can use if...else if and else to control the flow of your program.
+- You can also combine conditions with logical operators.
+
+
+#### Basic If...Else
+
+-  Use `if` to run code when a condition is true.
+- Add `else` for the false case, and `else if` for multiple branches.
+
+- ex. - here we see an example that prints a letter grade based on the `score`.
+`
+let score = 90
+if score >=90{
+	print("A")
+} else if score >= 80{
+	print("B")
+} else {
+	print("C or lower")
+}
+`
+
+- Tip: Note that, Swift conditions must be `Bool`.
+	- Also, there is no implicit conversion from integers to booleans.
+
+#### Basic If...Else
+#### Basic If...Else
+
 #### If
 #### Else
 #### Else If
