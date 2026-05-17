@@ -1447,12 +1447,82 @@ if score >=90{
 - Tip: Note that, Swift conditions must be `Bool`.
 	- Also, there is no implicit conversion from integers to booleans.
 
-#### Basic If...Else
-#### Basic If...Else
+
+##### Even or Odd
+
+- Use `else` to handle the alternate outcome.
+- eg- 
+`
+let n = 7
+if n % 2 == 0{
+	print("Even")
+} else {
+	print("Odd")
+}
+`
+
 
 #### If
+
+- Execute code conditionally when an expression evaluates to `true`.
+
+##### Basic if
+
+- `if` condition runs code only when a condition evaluates to `true`.
+- eg. -
+`
+let temp = 25
+if temp > 20 {
+	print("Warm")
+}
+`
+
+##### Threshold Check
+
+- Trigger an action when a value exceeds a threshold.
+- eg. -
+`
+let speed = 55
+if speed > 50 {
+	print("Slow down")
+}
+`
+
 #### Else
+
+- Use `else` to handle the false branch of a condition - which runs only when the if or else if statement fails.
+
+
+##### Handle the false branch with else
+
+- Use `else` to run an alternate block when the condition is false.
+- eg.-
+`
+let hasAccess = false
+if hasAccess {
+	print("Welcome")
+} els {
+	print("Access denied")
+}
+`
+
+##### Age Gate
+
+- use `else` to handle when a user does not meets a requirement.
+- eg. -
+`
+let age = 16
+if age >= 18 {
+	print("Access granted.")
+} else {
+	print("Access denied.")
+}
+`
+
 #### Else If
+
+- 
+
 #### Short Hand If...Else
 #### Nested If
 #### Logical Operators
