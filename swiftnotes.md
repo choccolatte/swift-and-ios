@@ -1540,10 +1540,147 @@ if score >= 90 {
 }
 `
 
+- ex 2 - Here, we use multiple `else if` branches to categorize values.
+`
+let t = 0
+if t <= 0 {
+	print("Freezing")
+} else if t < 10 {
+	print("Cool")
+} else {
+	print("Pleasant")
+}
+`
+
 #### Short Hand If...Else
+
+- We can use the ternary operator `condition ? a : b` for concise conditional expressions.
+
+##### Basic Ternary Operator 
+
+- Use the ternary operator to choose between two values in a single expression.
+- ex. - here, we see this example that returns  "Adult" when `age >= 18` otherwise, it returns "Minor"
+`
+let age = 20
+let status = (age >= 18) ? "Adult" : "Minor"
+print(status)
+`
+
+##### Choose the Minimum
+
+- We can use a ternary operator to select the smaller of two values.
+- ex. - here, we see an example that prints the smaller number
+`
+let a = 5, b = 9
+let min = (a < b) ? a : b
+print(min)
+`
+
+- here, if `a` is not less than `b`, the expression returns `b`.
+
+
 #### Nested If
-#### Logical Operators
+
+- Nest `if` statements to check multiple levels of conditions.
+
+##### Use nested conditions for multi-step checks
+
+- use nested conditions to handle layered checks, such as authentication then assign role.
+- ex. -
+`
+let isLoggedIn = true
+let isAdmin = true
+
+if isLoggedIn {
+	if isAdmin {
+		print("Admin access granted.")
+	} else [
+		print("Limited access")
+	]
+}
+`
+
+- use nested conditions to handle layered checks, such as authentication then role.
+
+##### Validate and Branch
+
+- Validate inputs first, then use a nested `if` to branch inside the valid case.
+- ex. -
+`
+let score = 85
+if score >= 0 && score <= 100{
+	if score >= 90 {
+		print("A")
+	} else if score >= 80{
+		print("B")
+	} else if score >= 70 {
+		print("C")
+	} else {
+		print("D")
+	}
+} else {
+	print("Invalid score")
+}
+`
+
+#### If with Logical Operators
+
+- combine conditions with `&&`, `||` and negate with `!`.
+
+##### Combine conditions with logical operators
+
+- use AND, OR, and NOT to build complex conditions that control code paths.
+- ex - 
+`
+let isMember = true
+let hasCoupon = false
+
+if isMember || hasCoupon {
+	print("Discount applied")
+} else {
+	print("No discounts")
+}
+`
+
+##### AND and NOT
+
+- combine conditions with `&&` and negate with `!`.
+- ex. -
+`
+let isMember = true
+let expired = false
+
+if isMember && !expired{
+	print("Active member")
+} else {
+	print("Non-active member")
+}
+`
+
+
 #### Real Life Examples
+
+- here, we apply conditional logic to real situations like validation, feature flags, or permissions.
+
+- ex. - here, we use conditions to validate input and guard against empty or invalid values.
+- ex. -
+`
+let input = "hello"
+if !input.isEmpty{
+	print("Input received: \(input)")
+}
+`
+- when the input is empty, the code inside the condition is skipped.
+
+- ex. 2 - here, we create a feature flag example - where, we gate a feature behind a flag and a user group.
+`
+let enabled = true
+let userGroup =  "beta"
+
+if enabled && userGroup == "beta" {
+	print("Show feature")
+}
+`
 
 
 
