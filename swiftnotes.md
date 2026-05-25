@@ -1521,7 +1521,24 @@ if age >= 18 {
 
 #### Else If
 
-- 
+- We can chain multiple conditions with `else if` for more than two branches.
+
+##### Branch with else if conditions
+
+- Use `else if` for additional conditions when the first ` is false.
+- ex. - this example evaluates multiple ranges using chained `else if` clauses.
+`
+let score = 72
+if score >= 90 {
+	print("A")
+} else if score >= 80 {
+	print("B")
+} else if score >= 70 {
+	print("C")
+} else {
+	print("D")
+}
+`
 
 #### Short Hand If...Else
 #### Nested If
