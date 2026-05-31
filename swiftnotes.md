@@ -1731,11 +1731,110 @@ switch command {
 
 
 ### While Loop
+
+- repeat code while a condition is true using `while`.
+- use `repeat { ... } while` to check the condition after the loop body.
+
+##### while
+
+- the `while` loop checks the condition before each iteration.
+- ex. - this example here, counts down from 3 using a `while` loop.
+`
+var n = 3
+while n > 0 {
+	print(n)
+	n -= 1
+}
+
+print("Liftoff!")
+`
+
+##### repeat {} while
+
+- `repeat` runs the body first, then checks the condition.
+- ex. - this example here, demonstrates `repeat` (do-while style)
+`
+var attempts = 0
+repeat {
+	attempts += 1
+	print("Attempt #\(attempts)")
+} while attempts < 3
+`
+
+- Tip: Avoid infinite loops. Ensure the loop condition will eventually become false, else you'll be caught in an infinite loop.
+
+
 #### Repeat/While Loop
+
+- use `repeat { ... } while condition` to run the body at least once.
+
+##### Repeat/while Loop Example
+
+- this example here uses a repeat/while loop to print "Try #1" and "Try #2".
+- ex. - this example here, demonstrates `repeat` (do-while style).
+`
+var attempts = 0
+repeat {
+	attempts += 1
+	print("Attempt # \(attempts)")
+} while attempts <= 5
+`
+
+- Tip; Avoid infinite loops. Ensure the loop condition will eventually become false.
+
+
+##### Runs once even if the Condition is False
+
+- Because `repeat` checks the condition after the body, it executes at least once.
+- ex. -
+`
+var n = 0
+repeat {
+	print("Runs once")
+} while n > 0
+`
+
 #### Real Life Examples
+
+- use loops to retry operations, poll statuses, or process queues carefully with exit conditions.
+
+#### While Loop from 3 to 1
+
+- Counts down from 3 to 1
+- ex.-
+`
+var remaining = 3
+while remaining > 0 {
+	print("Remaining: \(remaining)")
+	remaining -= 1
+}
+`
+
+#### Poll Until Success
+
+- repeat an action with a cap on attempts until a condition is met.
+- ex. -
+`
+var attempts = 0
+var success = false
+
+while !success && attempts < 5{
+	attempts += 1
+	print("Checking... #\(attempts)")
+
+	if attempts == 3{
+		success = true
+		print("Success")
+	}
+}
+`
 
 
 ### For Loop
+
+- 
+
+
 #### Nested Loops
 #### For-Each Loop
 #### Real-Life Examples
