@@ -1832,18 +1832,372 @@ while !success && attempts < 5{
 
 ### For Loop
 
-- 
+- use `for-in` to iterate over ranges, arrays, dictionaries, and other sequences.
+
+#### Iterate a Range
+
+- Use a range to loop a fixed number of times.
+- ex - this example iterates from 1 to 3 inclusive.
+`
+for i in 1...3{
+	print(i)
+}
+`
+
+#### Iterate an Array
+
+- loop through an array with `for-in` or `enumerated()` to access index and value.
+- ex - 
+`
+let nums = [10, 20, 30]
+for n in nums{
+	print(n)
+}
+
+for (index, value) in nums.enumerate(){
+	print("index: \(index), value: \(value)")
+}
+`
+
+- use `enumerated()` to get index and value together.
+
+- Tip: Prefer `for-in` over manual index loops when you do not need the index.
 
 
 #### Nested Loops
+
+- we can place a nested loop inside another loop to generate combinations or matrices.
+
+
+##### Generate Combinations with Nested Loops
+
+- use inner and outer loops to produce pairs or grids from ranges and collections.
+- ex. -
+`
+for i in 1...2 {
+	for j in 1...3{
+		print(i, j)
+	}
+}
+`
+
+
+##### Multiplication Table
+
+- use nested loops to build a small multiplication table.
+- ex. -
+`
+for i in 1...3{
+	var row = ""
+	for j in 1...3 {
+		row += "\(i * j)"
+	}
+
+	print(row)
+}
+`
+
+
 #### For-Each Loop
+
+- use `forEach` to iterate sequences with a closure.
+- in Swift, a closure is a self-contained block of code that you can pass around and use in your program. Think of it as a function without necessarily giving it a name.
+- ex. -
+`
+let greet = { (name: String) -> String in
+	return "Hello, \(name)!"
+}
+
+- here, `greet` is a closure.
+
+print(greet("Alice"))
+`
+
+##### Iterate with forEach closures
+
+- Pass a closure to `forEach` to process each element of a sequence.
+- ex. -
+`
+["A", "B", "C", "D", "E"].forEach { print($0) }
+`
+
+
+##### Enumerated forEach
+
+- use `enumerated()` with `forEach` to get index and value.
+- ex. -
+`
+let items = ["A", "B", "C", "D", "E"]
+items.enumerated().forEach { print("\($0.offset): \($0.element)") }
+`
+
+
 #### Real-Life Examples
 
+- in Swift, we can use loops to process arrays, paginate data, or aggregate results.
+
+##### Process arrays and aggregate results
+
+- loop over a collection and accumulate values to compute totals like sums or averages.
+- ex. -
+`
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+var sum = 0
+for n in numbers { sum += n }
+print(sum)
+`
+
+##### Filter Even Numbers
+
+- filter a collection to keep only the values you need.
+- ex. -
+`
+let numbers = [1, 2, 3, 4, 5]
+let evens = numbers.filter { $0 % 2 == 0 }
+print(evens)
+`
 
 ### Break/Continue
+
+- use `break` to exit a loop, and `continue` to skip to the next iteration.
+
+#### break
+
+- stop the loop immediately when a condition is met.
+- ex - here, the example stops printing when `i` reaches 4.
+`
+for i in 1...10 {
+	if i == 4 { break }
+	print(i)
+}
+`
+
+#### continue
+
+- skips the rest of the current iteration but keep looping.
+- ex. - here, this example prints only the odd numbers using `continue.`
+`
+for i in 1...5 {
+	if i % 2 == 0 { continue }
+	print(i) // only prints the odd numbers
+}
+`
+
+Tip: Prefer clear conditions and early exits to reduce nested branches.
+
+
 ### Collections
 
+- use arrays, dictionaries, and sets to store ordered lists, key-value pairs, andd unique items.
 
+#### Arrays
+
+- Arrays store ordered lists of values.
+- Syntax: `[Type]` for type, append with `.append`, count with `.count`, access with `array[index]`.
+- ex. - here, this example creates an `[Int]` array, appends a value, reads the count, and accesses the first element.
+`
+var nums: [Int] = [1, 2, 3, 4, 5]
+nums.append(6)
+print(nums.count) // 6
+print(nums[0]) // 1
+`
+
+##### Dictionaries
+
+- Dictionaries store key-value pairs.
+- Syntax: `[Key: Value]` for type, assign with `dict[key] = value`, read with `dict[key] ?? default`.
+- ex. - here, this example defines a `[String: Int]` dictionary, inserts a key, and reads with nil-coalescing.
+`
+var ages: [String: Int] = ["Kai":30]
+ages["Eliza"] = 21
+print(ages["Kai"] ?? 0)
+`
+
+#### Sets
+
+- Sets store unique items.
+- Syntax: `Set<Element>` or literal, test membership with `.contains`.
+- ex. - here, this example creates a `Set` which duplicates values, and checks membership with `contains`.
+`
+var letters: Set<Character> = ["A", "B", "C"]
+print(letters.contains("C")) // true
+`
+
+- Notes: Arrays preserve order and allow duplicates. Sets store unique values. Dictionaries map keys to values.
+
+
+#### Sets
+
+- Sets store unique values with no defined order.
+- Test membership with `contains`, and use union/intersection operations.
+
+##### Deduplicate Values
+
+- Use sets to deduplicate values from an array.
+- ex. - here, this example creates a `Set` which deduplicates values and checks membership.
+`
+var letters: Set<Character> = ["A", "B", "A"]
+print(letters.contains("A"))
+`
+
+##### Set Operations
+
+- Combine or compare sets using `union`, `intersection` and `subtracting`.
+- ex. -
+`
+let a: Set<Int> = [1, 2, 3]
+let b: Set<Int> = [3, 4]
+print(a.union(b).sorted)() // [1, 2, 3, 4]
+print(a.intersection(b).sorted()) // [3]
+print(a.subtracting(b).sorted()) // [1, 2]
+`
+
+- here, in this example, it shows how to use set operations to combine or compare sets:
+	- `union` - combines sets
+	- `intersection` - finds common elements
+	- `subtracting` - removes common elements
+
+
+#### Dictionaries
+
+- Dictionaries store key-value pairs.
+- Lookups are fast by key.
+- Use subscripting to read and write values.
+
+##### Basics
+
+- ex. - here, this example adds and reads values using dictionary subscripting.
+`
+var ages: [String: Int] = ["Kai": 30]
+ages["Eliza"] = 21
+print(ages["Kai"] ?? 0)
+`
+
+##### Iterate Keys and Values
+
+- Loop through a dictionary to access keys and values.
+- ex.-
+`
+let ages = ["Kai": 30, "Eliza": 21]
+for k in ages.keys.sorted(){
+	print("\(k) : \(ages[k]!)")
+}
+`
+
+
+#### map, filter, reduce
+
+- Transform and aggregate collections with `map`, `filter`, and `reduce`.
+
+##### Transform and Aggregate with map/filter/reduce
+
+- use `map` to transform elements, `filter` to select a subset, and `reduce` to combine into a single result.
+- ex. -
+`
+let nums = [1, 2, 3, 4, 5]
+let doubled = nums.map { $0 * 2 }
+print(doubled)
+
+let evens = nums.filter { $0 % 2 == 0 }
+print(evens)
+
+let sum = nums.reduce(0, +)
+print(sum)
+`
+
+##### Convert and Sum
+
+- use `compactMap` to convert valid strings to numbers, then `reduce` to sum.
+- ex. -
+`
+let raw = ["1", "2", "a", "3", "4", "z", "5"]
+let ints = raw.compactMap { Int($0) } // [1, 2, 3, 4, 5]
+let total = ints.reduce(0, +)
+print(total)
+`
+
+
+#### Sorting
+
+- SOrt arrays with `sorted()` (returns new) or `sort()` (in-place sorting without returning anything new). Provide a closure for custom order.
+- Sort ascending using `sorted()` and descending in-place using `sort(by:)`.
+- ex. - here, this example sorts ascending using `sorted()` and descending in-place using `sort(by:)`.
+`
+var nums = [3, 2, 1]
+let ascending = nums.sorted()
+print(ascending) // [1, 2, 3]
+
+nums.sort(by: >)
+print(nums) // [3, 2, 1]
+`
+
+##### Case-insensitive Sort
+
+- Provide a custom closure to sort strings without regard to case (upper or lower case).
+- ex. -
+`
+let names = ["bob", "Alice", "Dave", "kush"]
+let caseInsensitive = names.sorted { $0.lowercased() < $1.lowercased() }
+print(caseInsensitive) // ["Alice", "bob", "Dave', "kush"]
+`
+
+
+#### Mutability (let vs var)
+
+- Use `let` for constants and `var` for variables.
+- Arrays and dictionaries declared with `var` can be modified in-place.
+
+##### Mutable vs Immutable
+
+- Declare with `var` when you intend to add/remove elements, and use `let` to prevent mutations and make elements constants.
+- ex. -
+`
+let fixed = [1, 2]
+print(fixed.count) // 2
+var bag = [1, 2]
+bag.append(3)
+print(bag.count) // 3
+`
+
+##### Dictionary Mutability
+
+- Mutate dictionaries declared with `var` by inserting or updating keys.
+- ex.-
+`
+var user = ["name":"Kai"]
+user["city"] = "London"
+print(user.count)
+`
+
+
+#### Collection Protocols
+
+- Arrays, Sets, and Dictionaries conform to `Sequence` adm `Collection`, which provide common APIs like `count`, and `isEmpty`.
+
+##### Common APIs
+
+- Use `count` and `isEmpty` to check collection size.
+- ex. - here, this example shows shared operations exposed via collection protocols.
+`
+let arr = [1, 2, 3]
+print(arr.count) // 3
+print(arr.isEmpty) // false
+
+let s: Set<Int> = [1, 2, 3]
+print(s.contains(2)) // true
+print(s.isEmpty) // false
+`
+
+##### Indices
+
+- Use the `indices` property to iterate valid positions.
+- ex. -
+`
+let arr = [10, 20, 30]
+for i in arr.indices {
+	print("index: \(i), value: \(arr[i])") // 1:10, 2:20, 3:30
+}
+`
 
 
 ## Swift Types & Functions

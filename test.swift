@@ -18,3 +18,13 @@ if score >=90{
 } else {
 	print("C or lower")
 }
+
+// multiplication table
+for i in 1...5{
+	var row = ""
+	for j in 1...5{
+		row += "\(i * j)"
+	}
+
+	print(row)
+}
