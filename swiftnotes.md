@@ -2201,6 +2201,104 @@ for i in arr.indices {
 
 
 ## Swift Types & Functions
+
+### Functions
+
+- With functions, you can define reusable code with parameters and return values; control labels, mutation with inout, defaults, and variadics.
+
+#### Defining and Calling Functions
+
+- use `func` to define a function with a name, parameters, and return value.
+- syntax -
+	- `func name(param: Type) -> Return`
+	- call with `name(param:)`
+
+- ex - this example here, defines a function named `greet` that takes a `String` parameter and returns a greeting message.
+`
+func greet(name: String) -> String {
+	return "Hello, \(name)!"
+}
+
+print(greet(name: "Swift"))
+`
+
+#### Parameters and Return Values
+
+- Use `func` to define a function with multiple parameters and a return value.
+- syntax - 
+	- `func name(param1: Type, param2: Type) -> Return`
+	- Multiple params - seperate by commas; annotate types (denote types)
+	- Parameter labels - External names shown at call sites; use `_` to omit.
+	- Return type - Use `->`; omit for `Void`.
+
+- ex. - here, this example omits the external parameter labels with `_` and returns the sum as an `Int`.
+`
+func add(_ a: Int, _ b: Int) -> Int { a + b }
+print(add(2, 3))
+`
+
+- here, the leading `_` before each parameter means no external parameter name is required when calling the function.
+- in Swift, function parameters can have two names
+	- an external name used when calling the funcction
+	- a local name used inside the function body
+- ex. -
+`
+func add(first a: Int, second b: Int) -> Int {
+    a + b
+}
+`
+- here, first and second both are teh external names.
+- a and b are the local/internal names
+- So, we must call it like this -
+`
+add(first: 2, second: 3) - 2 and 3 are value of a nad b, and first and second are their positions, basically.
+`
+- and, when we write `_`, it means the function has no external names
+- ex. -
+`
+func add(_ a: Int, _ b: Int) -> Int {
+    a + b
+}
+`
+- so, the funciton is called like this -
+`
+add(2, 3)
+`
+- instead of -
+`
+add(a: 2, b: 3)
+- think of `_` in Swift, as telling Swift that - Dont require a label for this argument when the function is called.
+- Rule of thumb -
+	- Use labels when they make the call read like a sentence:
+		- `move(from: start, to: end)`
+	- Use `_` when the meaning is obvious from the function names:
+		- `add(2, 3)
+			max(10, 20)`
+
+
+#### Inout, Default Values, and Variadics
+
+- Use `func` to define a function with multiple parameters and a return value.
+- syntax - 
+	- `func name(param: inout Type, default: Type = value)`
+	- `func name(param: Type...)`
+
+
+### Operationals
+### Enums & Patterns
+### Closures
+### Tuples & Type Aliases
+
+
+
+
+
+
+
+
+
+
+
 ## Swift Object Model
 ## Swift Robustness & Async
 ## Swift Tooling
