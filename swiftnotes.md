@@ -2283,11 +2283,85 @@ add(a: 2, b: 3)
 	- `func name(param: inout Type, default: Type = value)`
 	- `func name(param: Type...)`
 
+- ex. - here, this example modifies a value in place using `inout`, supplies a default parameter, and sums a variadic list.
+`
+func increment(_ value: inout Int, by step: Int = 1){
+	value += step
+}
+
+var x = 10
+increment(&x)
+print(x) // 11
+
+func sum(_ nums: Int...) -> Int { nums.reduce(0, +) }
+print(sum(1, 2, 3))
+`
+
+- `inout`
+	- normally, function parameters are constants inside the function. You can read them but not modify the original variable that was passed in.
+		- for ex. - `
+			func addOne(_ value: Int){
+				// value += 1 // Error
+			}
+		`
+
+	- however, with `inout`, Swift lets the function modify the caller's variable directly.
+		- ex. - `
+			func increment(_ value: inout Int){
+				value += 1
+			}
+		`
+	- think of `inout` as - Pass the variable itself, not just a copy of its value.
+
+- default value
+	- `by step: Int = 1`
+	- here, the =1 means, if no value is supplied for `step`, use 1.
+	- so, these are equivalent - `increment(&x)` and `increment(&x, by: 1)`.
+	- note that, the `&` is required for `inout` parameters. -  it tells Swift - Allow this function to modify `x`.
+
+- sums function
+	- a Variadiac parameter (here, its - func sums(_ nums: Int...)) accepts zero or more `Int` values.
+	- So, with variadiac parameter, you can call sum(), or sum(1), or sum(1, 2, 3, 4, 4) and it wont be error, because inside the function, Swift collects them into an array.
+
+	- so, sum(1, 2, 3), Swift makes it - nums==[1, 2, 3]
+
+- reduce 
+	- the code body is -nums.reduce(0, +)
+	- `reduce` combines all elements into a single value - so, when the syntax is - `array.reduce(initialValue, operation)`, here, `nums.reduce(0, +)` means - start with `0` (value), and add each element after that from the array.
+	- so for [1, 2, 3] -> Swift performs -> 0+1 = 1, 1+2 = 3, 3+3 = 6
+
+- so basically - inout -> allows the function to modify the caller's variable.
+- &x -> is required when passing an inout argument.
+- =1 -> default value for step.
+- ... -> variadic parameter (accepts any number of `Int` s)
+- inside the function, `nums` is an array.
+- reduce(0, +) -> adds all elements together.
+
+
 
 ### Operationals
+
+#### What are Optionals?
+#### Guard Let
+
+
 ### Enums & Patterns
+
+#### Basic Enums
+#### Associated Values
+#### Pattern Matching
+#### Raw Values
+
 ### Closures
+#### Closure Expressions
+#### Capturing Values
+#### Trailing Closures
+
+
 ### Tuples & Type Aliases
+#### Tuple
+#### Type Aliases
+
 
 
 
