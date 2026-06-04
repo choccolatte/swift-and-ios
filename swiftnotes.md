@@ -2341,16 +2341,126 @@ print(sum(1, 2, 3))
 
 ### Operationals
 
+- With Operationals, we can represent misssing values safely, and unwrap them with  `??`, `if let`, or `guard let`.
+
+
 #### What are Optionals?
+
+- An operational is a type that can hold either a value or `nil` (no value).
+- Use `?` to declare an operational, and nil-coalescing (`??`) or binding (`if let`) to safely read it.
+- syntax - 
+	- `var x: String?`
+	- `x ?? "default"`
+	- `if let v = x { ... }`
+	- `guard let v = x else { return }`
+
+- ex. - here, this example prints a default using `??` and unwraps an operational safely with `if let`.
+`
+var nickname: String? = nil
+print(nickname ?? "(none)")
+
+nickname = "Ace"
+if let name = nickname {
+	print(name)
+}
+`
+
+- Tip: Use `guard let` inside functions to early-exit on missing values.
+
+
 #### Guard Let
+
+- Use `guard let` for early exit when required values are missing.
+- ex -
+`
+func greet (_ input: String?){
+	guard let name = input else {
+		print("Missing name")
+		return
+	}
+
+	print("Hello, \(name)")
+}
+
+greet(nil)
+greet("Swift")
+`
 
 
 ### Enums & Patterns
 
+- Model finits sets of cases with `enum`, add associated values, and match using `switch` with patterns.
+
 #### Basic Enums
+
+- Use `enum` to define a type with a fixed set of cases.
+- Syntax - `enum Direction { case north, south, east, west }`
+
+- ex.- here, this example defines an enum of directions and creates a value using a short dot syntax.
+`
+enum Direction { case north, south, east, west }
+
+let d: Direction = .east
+print(d)
+`
+
+
 #### Associated Values
+
+- Attach data to each case using associated values.
+- syntax - `enum Result { case success(T), failure(Error) }`
+
+- ex - here, this example shows a barcode which may be a UPC with four integers or a QR code with a string.
+`
+enum Barcode {
+	case upc(Int, Int, Int, Int)
+	case qr(String)
+}
+
+let b1 = Barcode.upc(8, 85909,  51226, 3)
+let b2 = Barcode.qr("Hello")
+`
+
 #### Pattern Matching
+
+- Use `switch` with patterns to extract associated values.
+- syntax -
+	- `switch value { case .case(let x): ... }`
+	- `if case` for single-case checks
+
+- ex - here, this example uses pattern matching to bind associated values and prints a formatted description:
+`
+func describe (_ code: Barcode) {
+	switch code {
+		case .upc(let numberSystem, let manufacturer, let product, let check):
+			print("UPC: \(numberSystem)- \(manufacturer)- \(product)- \(check)")
+		case .qr(let text):
+			print("QR: \(text)")
+	}
+}
+
+describe(b1)
+describe(b2)
+`
+
 #### Raw Values
+
+- provude default raw values (eg. `Int` or `String`) and initialize from them.
+- syntax - 
+	- `enum HTTPStatus: Int { case ok = 200, notFound = 404 }`
+	- `HTTPStatus(rawValue: 200)`
+
+- ex. - here, this example maps an integer status code back to an enum value using a failable initializer:
+`
+enum HTTPStatus: Int { case ok = 200, notFound = 404 }
+
+let status = HTTPStatus(rawValue: 200)
+print(status == .ok)
+`
+
+- Tip: Prefer associated values when each case needs different data; use raw values only when you must map to a primitive like an API code.
+
+
 
 ### Closures
 #### Closure Expressions
