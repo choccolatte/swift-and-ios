@@ -2339,22 +2339,26 @@ print(sum(1, 2, 3))
 
 
 
-### Operationals
+### Optionals
 
-- With Operationals, we can represent misssing values safely, and unwrap them with  `??`, `if let`, or `guard let`.
+- With Optionals, we can represent misssing values safely, and unwrap them with  `??`, `if let`, or `guard let`.
 
 
 #### What are Optionals?
 
-- An operational is a type that can hold either a value or `nil` (no value).
-- Use `?` to declare an operational, and nil-coalescing (`??`) or binding (`if let`) to safely read it.
+- An Optionals is a type that can hold either a value or `nil` (no value).
+- Use `?` to declare an Optional, and nil-coalescing (`??`) or binding (`if let`) to safely read it.
+- Optionals are one of the languages' most important features, they allow a variable to either -
+	- hold a value of a specific type, or
+	- hold nil(meaning 'no value')
+
 - syntax - 
 	- `var x: String?`
 	- `x ?? "default"`
 	- `if let v = x { ... }`
 	- `guard let v = x else { return }`
 
-- ex. - here, this example prints a default using `??` and unwraps an operational safely with `if let`.
+- ex. - here, this example prints a default using `??` and unwraps an Optional safely with `if let`.
 `
 var nickname: String? = nil
 print(nickname ?? "(none)")
@@ -2366,6 +2370,190 @@ if let name = nickname {
 `
 
 - Tip: Use `guard let` inside functions to early-exit on missing values.
+
+- Why do optionals exist?
+- imagine you're getting a user's middle name. not everyone has a middle name, so this value may or may not exist.
+- Without optionals, you might use an empty string:
+- `var middleName: String = ""`
+
+- But:
+	- Does `""` mean the person has no midddle name?
+	- Or is it a real value that happens to be empty?
+- Swift solves this by allowing the variable to be optional:
+- `var middleName: String?`
+
+- this means - "middleName can contain a String, or it can obtain nil."
+
+- Syntax -
+- `var x: String?`
+	- the `?` here, means that variable is optional.
+ 
+- `var x: String?`
+	`print(x)`
+	- here, the output will be `nil`, because we have put `String?`(optional) as type.
+
+- Later, `x = "Hello"`
+		`print(x)`
+- output - `Optional("Hello")`
+- internally, Swift treats this as - either:  `a String value`, or `nil`
+
+- What is nil?
+- `nil` means there is currently no value on this variable.
+- ex -
+`
+var age: Int? = nil
+`
+
+or 
+`var age: Int?`
+- both mean and does the same thing.
+
+- the problem is that you cannot use na Optional directly.
+- lets say, `var x: String? = "Hello"`
+- you cannot do - `print(x.count)`
+- Swift will give an error on this - that String? must be unwrapped.
+- because, Swift sees - x might be - "Hello" or nil, but not both, so there cant be a count. So, Swift will want you to unwrap the optional first.
+
+- what is nil-coalescing operator(`??`)?
+- syntax - `x ?? "default"`
+- meaning - if x has a vlaue, use it. Otherwise, use the default value.
+- ex-
+`
+var name: String? = nil
+let result = name ?? "Guest"
+print(result)
+`
+- output - Guest
+
+- When x contains a value?
+- `var name: String? = "John"`
+- `let result = name ?? "Guest"`
+- `print(result)`
+- Output - John
+
+- this of it as: `if x != nil {
+	use x
+} else {
+	use default
+}
+
+- real example -
+`
+lt username: String? = nil
+print("Welcome \(username ?? "Anonymous")")
+`
+- output - Welcome Anonymous
+
+
+- What about Optional Binding with `if else`?
+- syntax - `if let  v = x {
+	// use v
+}
+`
+- output - Hello
+
+- What happens internally?
+- Swift does something similar to -
+`
+if x != nil {
+	let v = x's value
+	print(v)
+}
+`
+
+- ex with nil - 
+`
+var x: String? = nil
+if let v = x {
+	print(v)
+}
+`
+- nothing prints because - x == nil
+
+- using Else
+`
+var x: String? = nil
+if let v = x { 
+	print("Value: \(v)")
+} else {
+	print("no value")
+}
+`
+- op - No value
+
+- Why do we use if let/
+- when you need to do work only if a value exists.
+- ex -
+`
+let email: String? = "[email protected]"
+if let email = email {
+	sendEmail(to: email)
+}
+`
+
+- what about Optional binding with `guard let`?
+- syntax - `guard let v = x else {
+	return
+}
+`
+- meaning - the value must exist, and if it doesnt, exit immediately (with return).
+- ex - 
+`
+func greet (name: String?) {
+	guard let name = name else {
+		return
+	}
+
+	print("Hello, \(name)")
+}
+`
+- calling the func - `greet(name: "John")`
+- output - Hello John
+
+- if name is nil 
+- `greet(name: nil)`
+- execution - guard fails -> return -> function exits
+
+- why `guard let` is popular?
+- without guard, we write code like this -
+`
+func greet(name: String?) {
+	if let name = name{
+		print("Hello, \(name)")
+	} else {
+		return
+	}
+}
+`
+- it works, but nesting becomes messy. So, we write with guard -
+`
+func greet(name: String?){
+	guard let name = name else {
+		return
+	}
+
+	print("Hello, \(name)")
+}
+`
+- with guard, its easier to read and cleaner to write.
+
+- if let - use it when the value is optional nad only needed inside a small block. The unwrapped value exists only inside the braces.
+	- `
+		if let username = username {
+			print(username)
+		}
+	`
+- guard let - use it when the value is required for the rest of the function. The unwrapped value remains availabe after the guard statement as well.
+	- `
+		guard let username = username else {
+			return
+		}
+
+		print(username)
+		updateProfile(usernamae)
+		saveData(username)
+	`
+- ?? - provides a fallback value.
 
 
 #### Guard Let
@@ -2442,6 +2630,21 @@ func describe (_ code: Barcode) {
 describe(b1)
 describe(b2)
 `
+
+- the dot syntax (.) in Swift enums is used everywhere.
+- ex. -
+`
+enum Barcode {
+	case upc(Int, Int, Int, Int)
+	case qr(String)
+}
+`
+
+- here, this enum defines two possible cases -
+	- upc
+	- qr
+- each case can carry associated values.
+
 
 #### Raw Values
 
