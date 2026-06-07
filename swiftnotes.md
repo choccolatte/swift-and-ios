@@ -2631,7 +2631,7 @@ describe(b1)
 describe(b2)
 `
 
-- the dot syntax (.) in Swift enums is used everywhere.
+- the dot syntax (.) in Swift enums is used almost everywhere.
 - ex. -
 `
 enum Barcode {
@@ -2645,6 +2645,48 @@ enum Barcode {
 	- qr
 - each case can carry associated values.
 
+- creating Enum values
+- full syntax -
+	let b1 = Barcode.upc(8, 85900, 51226, 3)
+	let b2 = Barcode.qr("Hello")
+- here, `Barcode.upc(...)` - creates a value of type `Barcode` using the `upc` case.
+- the creates a UPC Barcode with -
+	- numbersSystem = 8
+	manufacturer = 85909
+	product = 51226
+	check = 3
+
+- the `b2 = BArcode.qr("Hello")` - creates a QR barcode containing - "Hello"
+
+- `func describe(_ code: Barcode){...}`
+- this function accepts any `Barcode` value.
+- it doesnt know beforehand whether it receives - .upc(...) or .qr(...) - so, it uses a `switch`.
+
+- Pattern Matching with `switch`
+- `switch code{...}
+- Swift checks which enum case is stored.
+- UPC case - 
+	- `case .upc(let numberSystem,
+				let manufacturer, 
+				let product,
+				let check):
+	-  if `code` is a `.upc`, Swift extracts the four associated values and assigns them to local constants.
+	- `numberSystem
+		manufacturer
+		product
+		check`
+- for `b1`
+	- `.upc(8, 85909, 51226, 3)`
+- becomes - 
+	-  `numberSystem = 8
+		manufacturer = 85909
+		product = 51226
+		check = 3`
+- then, `print("UPC: \(nummberSystem)- \(manufacturer)- \(product)- \(check)")`
+- prints - UPC: 8- 85909- 51226- 3
+
+- qr code
+- 
 
 #### Raw Values
 
