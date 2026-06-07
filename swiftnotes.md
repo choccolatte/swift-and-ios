@@ -2685,8 +2685,68 @@ enum Barcode {
 - then, `print("UPC: \(nummberSystem)- \(manufacturer)- \(product)- \(check)")`
 - prints - UPC: 8- 85909- 51226- 3
 
-- qr code
-- 
+- qr case
+- `case .qr(let text):`
+- if the barcode is a QR code, Swift extracts the string into `text`.
+
+- for `b2` - `.qr("Hello")` -  becomes - `text = "Hello"` - then - `print("QR: \(text)")` - prints - QR: Hello
+
+- function calls 
+- `describe(b1)`
+- output - UPC: 8- 85909- 512260 3
+
+- `describe(b2)`
+- ouput - QR: Hello
+
+- Why use associated values?
+- Without associated values, you might write:
+`
+struct UPC {
+	let numberSystem: Int
+	let manufacturer: Int
+	let product: Int
+	let check: Int
+}
+
+struct QR {
+	let text: String
+}
+`
+
+- and then create some wrapper type to hold either one. Swift enums let you model this directly:
+`
+enum Barcode {
+	case upc(Int, Int, Int, Int)
+	case qr(String)
+}
+`
+- which means -  A barcode is either a UPC with four integers or a QR code with a string.
+- this is an example of a sum type (also called a tagged union or dicsriminated union in other languages).
+- a more readable version often labels the associated values:
+`
+enum Barcode {
+	case upc(
+		numberSystem: Int,
+		manufacturer: Int,
+		product: Int,
+		check: Int
+	)
+
+	case qr(text: String)
+}
+`
+- then you can create values like:
+`
+let code = Barcode.upc(
+	numberSystem: 8,
+	manufacturer: 85909,
+	product:  51226,
+	check: 3
+)
+`
+- which makes the meaning of each value much clearer.
+
+
 
 #### Raw Values
 
@@ -2708,9 +2768,67 @@ print(status == .ok)
 
 
 ### Closures
+
+- Capture values and pass behavior as first-class functions using closure expressions and trailing closure syntax.
+
+
 #### Closure Expressions
+
+- Closures are self-contained blocks of functionality that can be passed and stored.
+- syntax: 
+	`
+	- `{ (params) -> Return in statements }`
+	- shorthand args $0, $1, and type inference
+	`
+- ex - here, this example sorts numbers using a closure with shorthand arguments and maps them to strings.
+`
+let nums = [3, 1, 2]
+let sorted = nums.sorted { $0 < $1 }
+let strings = sorted.map { "#\($0)" }
+print(strings) // ["#1", "#2", "#3"]
+`
+
+
 #### Capturing Values
+
+- Closures capture constants and variables from the surrounding context by reference.
+- syntax - `func makeCounter() -> () -> Int { var n = 0 ; return { n+= 1; return n } }`
+
+- ex -
+`
+func makeCounter () -> () -> Int {
+	var n = 0
+	return {
+		n += 1
+		return n
+	}
+}
+
+let next = makeCounter()
+print(next()) // 1
+print(next()) // 2
+`
+
+- the closure remembers `n` between calls, producing an incrementing counter.
+
+
 #### Trailing Closures
+
+- If the last parameter is closure, you can use trailing closure syntax for readbility.
+- syntax - `fn(x) { ... }` instead of `fn(x, closure: { ... })`
+
+- ex. - this example uses trailing closure syntax to pass a block that runs three times.
+`
+func repeatTimes(_ n: Int, _ work: () -> Void) {
+	for _ in 0..<n { work() }
+}
+
+repeatTimes(3) {
+	print("Hi")
+}
+`
+
+- Tip: Use shorthand argument names (`$0`, `$1`) and trailing closures for readability.
 
 
 ### Tuples & Type Aliases
