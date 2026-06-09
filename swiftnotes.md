@@ -2973,26 +2973,148 @@ p2.x = 10
 
 
 #### Class vs Struct
+
+- Choose value sementics (struct) for simple data and reference sementics (class) for shared identity, inheritence, or Objective-C interop.
+
 ##### Key Differences
+
+- Copying - Structs copy on assignment and passing; classes pass references.
+- Inheritance - Classes support inheritance; structs do not.
+- Identity - Classes have identity sementics; structs compare by value (when Equatable).
+
+- ex. -
+`
+struct Point { var x: Int; var y: Int }
+class Counter { var value = 0 }
+
+var p1 = Point(x: 1, y: 2), p2 = p1 // copy
+p2.x = 9 // p1.x remains 1
+
+let c1 = Counter(), c2 = c1 // same instance
+c2.value = 7 // c1.value is 7
+`
 
 
 #### Class Properties
+
+- We can store state in class properties. Use `static` for type properties shared across all instances.
+
 ##### Stored and Computed
+
+- Use `var` for stored properties and `let` for constants.
+- ex. -
+`
+class User {
+	var name: String // stored
+	var greeting: String { "Hello, \(name)" } // computed
+	static var appName = "MyApp" // type property
+	init(name: String) { self.name = name }
+}
+`
+
 ##### Property Observers
 
+- use `willSet` and `didSet` to react to changes on stored properties.
+- ex - 
+`
+class Player {
+	var score: Int = 0 {
+		willSet { print("About to set to \(newValue)" ) }
+		didSet { print("Changed from \(oldValue) to \(score)" ) }
+	}
+}
 
-##### Class Methods
+let p = Player()
+p.score = 100
+`
+
+
+#### Class Methods
+
+- Use `static` or `class` to define type methods that belong to the type itself rather than an instance.
+
 ##### Type Methods
+
+- use `class` for overridable type methods; `static` methods cannot be overridden.
+- ex. -
+`
+class Math {
+	class func square(_ n: Int) -> Int { n * n } // overridable in subclasses
+	static func cube(_ n: Int) -> { n * n * n } // not overridable
+}
+
+print(Math.square(4))
+print(Math.cube(3))
+`
+
 ##### Override class func
+
+- Use `class` for overridable type methods; `static` methods cannot be overridden.
+- ex - 
+`
+class Base {
+	class func greet() { print("Base") }
+	static func ping() { print("Base ping") }
+}
+
+class Sub: Base {
+	override classs func greet() { print("Sub") }
+	// static func cannot be overridden
+}
+
+Base.greet()
+Sub.greet()
+Base.ping()
+`
 
 
 #### self keyword
+
+- use `self` to reference the current instance, disambiguate names, and in type methods to refer to the type.
+
 ##### Disambiguation
+
+- Disambiguate means to make something clear or distinct.
+- In this instance it is used to make parameter and property names distinct from each other.
+- Use `self` to disambiguate parameter and property names.
+- Ex -
+`
+struct User {
+	var name: String
+	init(name: String) { self.name = name } // disambiguate
+}
+
+class Counter {
+	var value = 0
+	func inc() { self.value += 1 } // optional here
+	class func resetAll() { print(Self.self) } // refer to the type
+}
+`
+
 ##### Mutating and self
 
+- Use `self` to disambiguate parameter and property names in mutating methods.
+- ex. -
+`
+struct Counter {
+	var value = 0
+	mutating func add(_ value: Int) {
+		self.value += value // disambiguate
+	}
+}
+
+var c = Counter()
+c.add(5)
+print(c.value)
+` 
 
 
 ### Inheritance
+
+#### Subclass and Override
+#### Call super
+
+
 ### Polymorphism
 ### Protocols
 ### Generics
