@@ -3111,12 +3111,104 @@ print(c.value)
 
 ### Inheritance
 
+- create class hierarchies where subclasses inherit properties and methods and cna override behavior.
+
 #### Subclass and Override
+
+- use `override` to override a superclass method.
+- ex. -
+`
+class Animal { func spreak() { print("...") } }
+class Dog: Animal { override func speak() { print("WOOF") } }
+let a = Animal(); a.speak() // ...
+let d =  Dog(); d.speak() // WOOF
+`
+
 #### Call super
+
+- use `super` to extend a superclass method when overriding.
+- ex. -
+`
+class Animal { func speak() { print("...) } }
+class Dog: Animal {
+	override func speak() {
+		super.speak()
+		print("WOOF")
+	}
+}
+
+let d = Dog()
+d.speak() // WOOF
+`
 
 
 ### Polymorphism
+
+- treat related types uniformly via inheritance or protocol conformance.
+- Override methods and rely on dynamic dispatch.
+
+#### Basic Polymorphism
+
+- use inheritance to treat related types uniformly.
+- ex. -
+`
+class Animal { func speak() { print("...") } }
+class Dog: Animal { override func speak() { print("WOOF") } }
+class Cat: Animal { override func speak() { print("MEOW") } }
+
+let animals: [Animal] = [Dog(), Cat()]
+animals.forEach { $0.speak() }
+`
+
+#### Protocol Polymorphism
+
+- use a protocol to treat unrelated types uniformly.
+- ex. -
+`
+protocol Speaker { func speak() }
+struct Dog: Speaker { func speak() { print("WOOF") } }
+struct Cat: Speaker { func speak() { print("MEOWWW") } }
+
+leat speakers: [Speaker] = [Dog(), Cat()]
+speakers.forEach { $0.speak() }
+`
+
+
 ### Protocols
+
+- define behavior contracts that types adopt, and extend them to add default implementations.
+
+#### Defining and Conforming to Protocols
+
+- a protocol defines a blueprint of methods and properties.
+- types adopt a protocol by providing implementations.
+- syntax -
+	- `protocol P { var x: Int { get set }; func f() }`
+	- `struct S: P{ ... }`
+
+- ex. - here, this example demonstrates how a protocol is defined and adopted by a type, and how the type provides an implementation for the protocol's method.
+`
+protocol Greetable { func greet() -> String }
+
+struct Person: Greetable {
+	var name: String
+	func greet() -> String { "Hello, \(name)" }
+}
+
+let p =  Person(name: "Swift")
+print(p.greet())
+`
+
+- Tip: Use protocol extensions to provide default method implementations.
+
+#### Protocols Extensions (Default Implementations)
+
+- Provide default behavior for conforming types by adding implementations in a protocol extension.
+- ex. 
+
+#### Protocols with Associated Types
+
+
 ### Generics
 ### Extensions
 ### Access Control
