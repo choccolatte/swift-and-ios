@@ -3271,7 +3271,7 @@ where C1.Element == C2.Element, C1.Element: Equatable {
 	- `T: Comparable`
 	- `where` clauses for more complex bounds.
 
-- ex. -
+- ex. - here, this example defines a generic `T`-typed swap function and shows it working with integers:
 `
 func swapTwo<T>(_ a: inout T, _ b: inout T) {
 	let tmp = a
@@ -3284,16 +3284,146 @@ swapTwo(&x, &y)
 print(x)
 print(y)
 `
+
 #### Generic Constraints (where)
 
+- Constrain generic parameters to types that meet certain requirements, like `Comparable`, using `where` clauses.
+- ex.; - here, this example, constrains `T` to `Comparable` so `<` can be used to pick a minimum:
+`
+func minVal<T: Comparable> (_ a: T, _ b: T) -> { a < b ? a ; b }
+
+print(minVal(3, 7)) // 3
+print(minVal("b", "a")) // a
+`
+
+- Tip: Constrain generic parameters, e.g.
+	- `T:Comparable`, to use operations like `<` or `==`.
 
 
 ### Extensions
+
+- add functionality to existing types without subclassing, including methods, computed properties, nad protoccol conformances.
+
+#### Computed Properties and Methods
+
+- external any type to add helpers that are scoped to that type.
+- syntax - 
+	- `extension Type { var computed: T { ... }; func util() { ... } }`
+
+- ex. - here, this example adds a computed property and a helper method to `String`.
+`
+extension String {
+	var isBlank: Bool { trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+	func repeated(_ n: Int) -> String { String(repeating: self, count: n) }
+}
+
+print(" ".isBlank) // true
+print("Hi".repeated(3)) // HiHiHi
+`
+
+#### Protocol Conformance in Extensions
+
+- adopt protocols outside the original type declaration to seperate concerns.
+- syntax -
+	- `extension Type: Protocol { ... }`
+
+- ex. - here, this example adds `Describable` conformance to `User` via an extension.
+`
+protocol Describable { func describe() -> String }
+
+struct User { let name: String }
+
+extension User: Describable {
+	func describe() -> String { "User(\(name))" }
+}
+
+print(User(name: "Kush").describe())
+`
+
+#### Nesting by Responsibility
+
+- Organize large types using multiple extensions grouped by feature (e.g., networking, formatting).
+- syntax - 
+	- `extension Type { /* Feature A */ }`
+	- `extension Type { /* Feature B */ }`
+
+- ex - 
+`
+struct Article { let title: String; let body: String }
+
+extension Article { // Formatting helpers
+	var preview: String { String(body.prefix(50)) + "..." }
+}
+
+extension Article { // Networking stub
+	static func fetchAll() -> [Article] { [] }
+}
+`
+
+
+
 ### Access Control
+
+- Restrict visibility of types and members woth `public`, `internal`, `fileprivate` and `private`.
+
+#### Levels
+
+- Swift's default are safe by design: `internal` is the default.
+- syntax -
+	- `public` - visible to other modules
+	- `internal` - module-only, default
+	- `fileprivate` - this file - current file
+	- `private ` - this scope type/extension
+
+- ex - here, this example shows `public` APIs, a module-internal type, a file-scoped property, and a private helper.
+`
+public struct APIClient {
+	public init() {}
+	public func request () {}
+}
+
+struct Repository { // internal by default
+	fileprivate var cache: [String: String] = [:]
+	private func reset() { cache.removeAll() }
+}
+`
+
+#### Types and Members
+
+- a member cannot be more visible than its enclosing type.
+- syntax - 
+	- `public struct S { internal var x: Int }` (valid)
+	- but not `internal struct S { public var x: Int }`
+
+- ex. -
+`
+internal struct Box { // whole type is internal
+	public var value: Int // warning/error: member more visible than type
+}
+`
+
+- members cannot exceed the visibility of their type; lower or equal visibility is allowed.
+
+- Tip: Prefer the most restrictive access level that still enables usage.
+
+
 ### Initializers
+#### Memberwise and Custom Init
+#### Class Designated vs Convenience
+#### Failable and Throwing Init
+
+
 ### Deinitializers
+#### deinit
+
 ### Value Sementics and COW
+#### Syntax
+#### Copy-on-Write
+
+
 ### Equatable & Comparable
+#### Derived vs Custom Conformance
+#### Sorting with Comparable
 
 
 
