@@ -3481,21 +3481,100 @@ struct Port {
 
 
 ### Deinitializers
+
+- Run cleanup code before a class instance is deallocated using `deinit`.
+
 #### deinit
 
+- Deinitializers are called automatically when an instance is deallocated.
+- syntax - 
+	- `deinit { ... }`
+
+- ex. - 
+`
+class FileHandle {
+	init() { print("open") }
+	deinit { print("close") }
+}
+
+var h: FileHandle? = FileHandle()
+h = nil // prints "close"
+`
+
+- Deinitializers are useful for cleanup tasks like closing files, releasing resources, or removing observers.
+
+
 ### Value Sementics and COW
+
+- Prefer value sementics for predictability.
+- Swift collections use Copy-on-Write(COW) to keep copies cheap until mutation.
+
 #### Syntax
+
+- `var a = [1,2,3]`
+- Arrays, sets, and dictionaries use value sementics.
+
+
 #### Copy-on-Write
+
+- Swift collections use Copy-on-Write (COW) to keep copies cheap until mutation.
+- ex. - here, this example shows that arrays use value semantics and COW.
+`
+var a = [1, 2, 3]
+var b = a // shares the same storage - basically a copy
+
+b.append(5) // triggers copy for b only
+print(a) // [1, 2, 3]
+print(b) // [1, 2, 3, 5]
+`
+
+- in the example above, `b` shares storage with `a`, but when `a.append(5)` is called, a copy is made for `b` only.
 
 
 ### Equatable & Comparable
+
+- Adopt `Equatable` and `Comparable` so your types support `==` and ordering operations.
+
 #### Derived vs Custom Conformance
+
+- Derived types inherit comformance automatically, while custom conformance requires explicit implementation.
+- ex. -
+`
+struct Point: Equatable, Comparable {
+	var x: Int, y: Int
+	static func == (lhs: Point, rhs: Point) -> Bool { lhs.x == rhs.x && lhs.y == rhs.y }
+	static func < (lhs: POint, rhs: Point) -> Bool { (lhs.x, lhs.y) < (rhs.x, rhs.y) }
+}
+
+let a = Point(x: 1, y: 2), b = Point(x: 1, y: 3)
+print(a == b) // false
+print(a < b) // true
+`
+
 #### Sorting with Comparable
 
+- Conform to `Comparable` to sort custom types and use `min() / max()`.
+- ex. -
+`
+struct Score: Comparable {
+	let user: String
+	let value: Int
+	static func < (1: Score, r: Score) -> Bool { l.value , r.value }
+}
+
+let scores = [Score(user: "A", value: 10), Score(user: "B", value: 5), Score(user: "C", value: 7)]
+print(sorted.map { $0.value })
+print(sorted.last!.value)
+`
 
 
 
 ## Swift Robustness & Async
+### Error Handling
+### Concurrency
+### Memory
+
+
 ## Swift Tooling
 ## SwiftUI Basics
 ## SwiftUI Data & Architecture
