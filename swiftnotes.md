@@ -3746,15 +3746,208 @@ print("Done")
 
 #### Task Groups
 
-- 
+- Use `withTaskGroup` to fan out concurrent child tasks and aggregate their results.
+- syntax - 
+	- `withTaskGroup(of: ReturnType.self) { group in ... }`
+
+- ex - here, this example concurrently computes squares for a list of numbers and aggregates the results from the task group:
+`
+import Dispatch
+
+func square(_ n: Int) async -> Int { n * n }
+
+print("Start")
+let sem = DispatchSemaphore(value: 0)
+Task {
+	var results: [Int] = []
+	await withTaskGroup(of: Int.self) { group in
+		for n in [1, 2, 3] {
+			group.addTask { await square(n) }
+		}
+		for await val in group {
+			results.append(val)
+		}
+	}
+
+	print(results.sorted().map(String.init).joined(seperator: ","))
+	sem.signal()
+}
+
+sem.wait()
+print("Done")
+`
 
 #### Actors and MainActor
+
+- Actors protect their mutable state from data races by serializing access.
+- Use `@MainActor` to mark code that must run on the main thread (e.g., UI updates).
+- syntax -
+	- `actor Name { ... }` defines an actor;  call methods/properties with `await` from outside.
+- MainActor: annotate types/functions with `@MainActor` to run on the main thread.
+
+- ex. - here, this example uses an actor to protect mutable state and aggregates increments via a task group:
+
+`
+import Dispatch
+
+actor SafeCounter {
+	private var value = 0
+	func increment() { value += 1 }
+	func get() -> Int { value }
+}
+
+let counter = SafeCounter()
+print("Start")
+let sem = DispatchSemaphore(value: 0)
+Task {
+	await withTaskGroup(of: Void.self) { group in
+		for _ in 0..<1000 {
+			group.addTask { await counter.increment() }
+		}
+	}
+
+	print("Final: \(await counter.get())")
+	sem.signal()
+}
+
+sem.wait()
+print("Done")
+`
+
+- Tip: Annotate UI-facing APIs with `@MainActor` to ensure they execute on the main thread.
+
 #### Task Cancellation
 
-### Memory
+- Cancel long-running work by calling `task.cancel()` and checking for cancellation with `Task.isCancelled` or `try Task.checkCancellation()`.
+- syntax -
+	- `t.cencel()`
+	- `Task.isCancelled`
+	- `try Task.checkCancellation()`
+
+- ex. - here, this example demonstrates cooperative cancellation by cancelling a running task and checking for cancellation:
+`
+import Dispatch
+
+func slowWork() async throws {
+	for i in 1...5 {
+		try await Task.sleep(nanoseconds: 300_000_000) // 0.3s
+		try Task.checkCancellation()
+		print("Step ", i)
+	}
+}
+
+let sem = DispatchSemaphore(value: 0)
+let t = Task {
+	do { try await slowWork() } catch { print("Cancelled") }
+	sem.signal()
+}
+
+DispatchQueue.global().asyncAfter(deadline: .now() + 0.7) {
+	t.cancel()
+}
+
+sem.wait()
+`
+
+
+### Memory Management
+
+- Understand ARC, avoid retain cycles with weak/unowned, and manage closure captures safely.
+
+#### Automatic Reference Counting (ARC)
+
+- Classes are reference types.
+- Swift uses ARC to automatically track and release class instances when no strong references remain.
+- ex. - here, this example demonstrates ARC's automatic dellocation of the Box instance when it goes out of scope:
+`
+class Box {
+	let name: String
+	init(_ n: String) { name = n; print("init \(n)") }
+	deinit { print("deinit \(name)" ) }
+}
+
+do {
+	let b = Box("A")
+	print("in scope")
+}
+
+print("after scope")
+`
+
+- Tip: Use `weak` to avoid strong refernece cycles between class instances.
+
+
+#### Strong Reference Cycles
+
+- A strong reference cycle occurs when two class instances hold strong references to each other, preventing ARC from dellocating them.
+- MArk one side as `weak` (or `unowned` when appropriate) to break the cycle.
+- ex. -
+`
+class Person {
+	let name: String
+	var apartment: Apartment?
+	init(name: String) { self.name = name }
+	deinit { print("Person deinit" ) }
+}
+
+class Apartment {
+	let unit: String
+	weak var tenant: Person? // weak breaks the cycle
+	init(unit: String) { "Apartment deinit" }
+	deinit { print("Apartment deinit" ) }
+}
+
+do {
+	var john: Person? = Person(name: "John")
+	var unit: Apartment? = Apartment(unit: "4A")
+	john!.apartment = unit
+	unit!.tenant = john
+	john = nil // person deinit
+	unit = nil // apartment deinit 
+}
+`
+
+- Declaring `tenant` as `weak` breaks the cycle so both objects dellocate when their strong references are set to `nil`.
+
+#### Closures and Capture Lists (weak self)
+
+- Closures capture variables by default.
+- When a class stores a closure that references `self`, use a capture list like `[weak self]` to avoid retain cycles.
+- ex. - 
+`
+class Loader {
+	var onComplete: (() -> Void)?
+	func load() {
+		// simulate async completion
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+			guard let self = self else { return }
+			print("Finished: \(self)" )
+			self.onComplete()
+		}
+	} 
+
+	deinit{ print("Loader deinit") }
+}
+
+do {
+	let loader = Loader()
+	loader.onComplete =  { print("done callback" ) }
+	loader.load()
+}
+
+// loader can be deallocated if nothing else references it
+`
 
 
 ## Swift Tooling
+### Swift Package Manager (SPM)
+#### Create a New Package
+#### Package.swift
+#### Targets, Products, Dependencies
+#### Add a Dependency
+
+
+
 ## SwiftUI Basics
 ## SwiftUI Data & Architecture
 ## iOS Capabilities
