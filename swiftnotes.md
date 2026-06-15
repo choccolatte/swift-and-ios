@@ -3568,10 +3568,189 @@ print(sorted.last!.value)
 `
 
 
-
 ## Swift Robustness & Async
 ### Error Handling
+
+- Throw and catch errors explicitly, or convert failures to optionals with `try?` when appropriate.
+
+#### Throw, Try, Catch
+
+- Functions can throw errors with `throw`.
+- Callers must use `try` and handle failures with `do/catch`, or use `try?` to get an optional result.
+- syntax -
+	- `func f() throws -> T`
+	- `try f()`
+	- `try? f()`
+	- `do { ... } catch { ... }`
+
+- ex. -
+`
+enum InputError: Error { case negative }
+
+func validate(_ n: Int) throws ->  String {
+	if n < 0 { throw InputError.negative }
+	return "ok: \(n)"
+}
+
+do {
+	let result = try validate(-1)
+	print(result)
+} catch {
+	print("error")
+}
+
+let maybe = try? validate(1)
+print(maybe ?? "nil")
+`
+
+- Tip: Use `defer` to run cleanup code before exiting the current scope, even when errors are throw.
+
+#### Defer (Cleanup)
+
+- Use `defer` to ensure cleanup code always runs when a scope exits, even if an error is throw.
+
+- ex. - here, this example prints "cleanup" even when an error is thrown, guarnteeing resource cleanup.
+`
+enum FileError: Error { case fail }
+
+func work(_ ok: Bool) throws {
+	print("start")
+	defer { print("cleanup") }
+	if !ok { throw FileError.fail }
+	print("done")
+}
+
+do { try work(false) } catch { print("error") }
+`
+
 ### Concurrency
+
+- Write safe, structured async code with async/await, Tasks, actors, and cooperative cancellation.
+
+#### Basic GCD (Grand Central Dispatch)
+
+- Use `DispatchQueue` to perform work asynchronously.
+- the example below runs a task on a background queue and waits for it to complete.
+- syntax - 
+	- `DispatchQueue.global().async { ... }`
+	- `DispatchGroup.enter()`
+	- `DispatchGroup.leave()`
+	- `DispatchGroup.wait()`
+
+- ex. - here, this example runs work on a background queue and waits for the completion using a DispatchGroup.
+`
+import Dispatch
+
+print("Start")
+let group = DispatchGroup()
+group.enter()
+DispatchQueue.global().async {
+	print("Background work")
+	group.leave()
+}
+
+group.wait()
+print("Done")
+`
+
+- Tip: In modern Swift, prefer `async/await` and `Task` over GCD for structured concurrency.
+
+#### Async/Await with Task
+
+- `async/await` lets you write asynchronous code that looks like synchronous code.
+- Use `Task` to start concurrent work from synchronous contexts.
+- syntax -
+	- `func name() async -> T {}`
+	- `await value`
+	- `Task { ... }`
+
+- ex. - here, this example starts asynchronous work with Task and awaits a value using async/await.
+`
+import Dispatch
+
+func fetchValue() async -> Int { 7 }
+
+print("Start")
+let sem = DispatchSemaphore(value: 0)
+Task {
+	let v = await fetchValue()
+	print("Got \(v)" )
+	sem.signal()
+}
+sem.wait()
+print("Done")
+`
+
+#### async let (Parallel Child Tasks)
+
+- Use `async let` to start multiple child tasks in parallel and await their results.
+- syntax - 
+	- `async let name = expression()` starts a child task; use `await` when reading the value.
+
+- ex. - here, this example launches two child tasks in parallel and awaits both to compute a total.
+`
+import Dispatch
+
+func fetch(_ id: Int) async -> Int { id * 100 }
+
+print("Start")
+let sem = DispatchSemaphore(value: 0)
+Task {
+	async let a = fetch(1)
+	async let b = fetch(5)
+	let total = await( a + b )
+	print("Total \(total)" )
+	sem.signal()
+}
+
+sem.wait()
+print("Done")
+`
+
+#### Async/Await with Errors
+
+- Async functions can also (use) throw.
+- Combine `try` with `await` and handle failures with `do/catch`.
+- syntax -
+	- `func name() async throws -> T`
+	- `try await`
+	- `do { ... } catch { ... }`
+
+- ex. - here, this example shows error handling with try/await and do/catch around an async function:
+`
+import Dispatch
+
+enum FetchError: Error { case bad }
+
+func fetch(_ ok: Bool) async throws -> Int {
+	if !ok { throw FetchError.bad }
+	return 42 // errorcode
+}
+
+print("Start")
+let sem = DispatchSemaphore(value: 0)
+Task {
+	do {
+		let v = try await fetch(false)
+		print("ok \(v)")
+	} catch{
+		print("error")
+	}
+
+	sem.signal()
+}
+
+sem.wait()
+print("Done")
+`
+
+#### Task Groups
+
+- 
+
+#### Actors and MainActor
+#### Task Cancellation
+
 ### Memory
 
 
