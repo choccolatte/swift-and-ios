@@ -3941,14 +3941,137 @@ do {
 
 ## Swift Tooling
 ### Swift Package Manager (SPM)
+
+- Create packages, declare dependencies, and build libraries and executables with Swift Package Manager.
+
 #### Create a New Package
+
+- Swift Package Manager (SPM) is Swift's built-in dependency manager and build tool.
+- syntax -
+	- `swift package init --type executable, swift build, swift run`
+
+- ex. - here, this example initializes an executable package, builds it, and runs the generated binary:
+`
+$ mkdir hello-pkg && cd hello-pkg
+$ swift package init --type executable
+$ swift build
+$ swift run
+Hello, world!
+`
+
 #### Package.swift
+
+- the maniefst file `Package.swift` describes your package, products, and dependencies.
+- syntax - 
+	- declare `products`, add `dependencies`, and list `targets` that build your code
+
+- ex. - in Package.swift  -> here, this basic manifest declares an executable product and a single target with no external dependencies:
+`
+// swift-tools-version: 5.10
+import PackageDescription
+
+let package = Package(
+	name: "hello-pkg",
+	products: [
+		.executable(name: "hello-pkg", targets: ["hello-pkg"]),
+	],
+	dependencies: [
+		// .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0")
+	],
+	targets: [
+		.executableTarget(
+			name: "hello-pkg",
+			dependencies: []
+		)
+	]
+)
+`
+
 #### Targets, Products, Dependencies
+
+- Targets build code.
+- Products are what you ship (executables or libraries).
+- Dependencies are other packages you use.
+- syntax -
+	- add `.package(url:..., from: ...)` in `dependencies`, and reference it via `.product(name:..., package:...)` in target `dependencies`.
+
+- ex.- in Package.swift - this example here adds a dependency and links its product into the executable target, then builds and runs with an option - 
+`
+// swift-tools-version: 5.10
+import PackageDescription
+
+let package = Package(
+	name: "hello-pkg",
+	products: [
+		.executable(name: "hello.pkg", targets: ["hello-pkg"]),
+	],
+	dependencies: [
+		.package(url: "https://github.com", from: "1.2.0")
+	],
+	targets: [
+		.executableTarget(
+			name: "hello-pkg",
+			dependencies: [
+				.product(name: "ArgumentParser", package: "swift-argument-parser")
+			]
+		)
+	]
+)
+`
+- in main.swift - 
+`
+import ArgumentParser
+
+@main
+struct Hello: ParsableCommand {
+	@Option(name: .shortAndLong, help: "Name to greet")
+	var name: String = "Swift"
+
+	mutating func run() throws {
+		print("Hello, \(name)!")
+	}
+}
+`
+- in Terminal
+`
+$ swift build
+$ swift run hello-pkg --name Kush
+Hello, Kush!
+` 
+
 #### Add a Dependency
 
+- Add a dependency in `dependencies` and link it in your target.
+- Then, run `swift build`.
+- syntax -
+	- `swift package resolve` to update dependencies and `swift package clean` to clean build artifacts.
+
+- Tip: Use `swift package resolve` to update dependencies and `swift package clean` to clean build artifacts.
 
 
 ## SwiftUI Basics
+### SwiftUI Intro
+### SwiftUI: What & Why?
+### Building the First "App"?
+### Step 1: Basic Example
+### Step 2: State with ObservableObject
+### Run Example in XCode
+
+
+### iOS Project Setup
+### SwiftUI Layout
+### SwiftUI Navigation
+### SwiftUI Data Flow
+### SwiftUI Lists & Forms
+### SwiftUI Animations
+### SwiftUI Gestures
+### SwiftUI Modifiers & ViewBuilder
+### SwiftUI Previews
+### SwiftUI Accessibility
+### SwiftUI Styling & Theming
+
+
+
 ## SwiftUI Data & Architecture
 ## iOS Capabilities
 ## iOS Quality & Compliance
