@@ -4051,11 +4051,63 @@ Hello, Kush!
 
 ## SwiftUI Basics
 ### SwiftUI Intro
+
+- Build interfaces declaratively with views, state, and data-driven updates using `SwiftUI`.
+
 ### SwiftUI: What & Why?
-### Building the First "App"?
-### Step 1: Basic Example
-### Step 2: State with ObservableObject
-### Run Example in XCode
+
+- **What?**
+- SwiftUI is Apple's modern UI framework for building apps on iOS, iPadOS, macOS, watchOS, and tvOS.
+- It is declarative - you describe what the UI should look like, and SwiftUI updates it when your data changes.
+
+- **Why?**
+- Declarative syntax and reactive updates with `@State`, `@Binding`, and `ObservableObject`.
+- Unified API across Apple Platforms.
+- Live previews and fast iteration in Xcode.
+
+#### Building the First "App"?
+
+- First, you'll build a simple counter view (`CounterView`) shown by the app entry (`App.swift`).
+- Next, you'll refactor the same UI but move its state into a view model (`ObservableObject`), which scales better in the real apps.
+
+
+#### Step 1: Basic Example
+
+- syntax - Use `@State` for local state and bind it to controls (e.g., `Button`); render with `VStack / Text`.
+- ex. - here, this example shows a simple counter using `@State` and a button inside a `VStack`:
+- in ContentView.swift:
+`
+import SwiftUI
+
+struct ContentView: View {
+	@State private var count = 0
+
+	var body: some View {
+		VStack(spacing: 12) {
+			Text("Count: \(count)")
+			Button("Increment") { count += 1 }
+		}
+		.padding()
+	}
+}
+`
+
+- in App.swift:
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- Note: 
+
+#### Step 2: State with ObservableObject
+#### Run Example in XCode
 
 
 ### iOS Project Setup
