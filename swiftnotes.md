@@ -4104,10 +4104,102 @@ struct MyApp: App {
 }
 `
 
-- Note: 
+- Note: `ContentView.swift`: in SwiftUI, views live in ordinary `.swift` files.
+- The starter view is typically named `ContentView.swift`, and the app's entry point (`App.swift`) shows it in a `WindowGroup`.
 
 #### Step 2: State with ObservableObject
+
+- Use `ObservableObject` to hold shared state, and `@StateObject` in the creating view to own its lifecycle.
+- Views  update automatically when `@Published` properties change.
+- syntax -
+	- `class VM: ObservableObject { @Published var count }`, `@StateObject private var vm = VM()`, bind UI to `vm.count`.
+
+- this example refactors the basic counter above.
+- the UI and behavior are the same (a counter label nad button), but the state now lives in a `CounterModel` view model managed by `@StateObject`. this pattern scales better as your app grows.
+
+- ex - her, this example promotes state into a `ViewModel` and updates the UI via `@Published` changes observed by the view:
+- in Demo.swift
+`
+import SwiftUI
+import Combine
+
+class CounterModel: ObservableObject {
+	@Published var count = 0
+	func increment() { count += 1 }
+}
+`
+
+- in ContentView.swift
+`
+imort SwiftUI
+
+struct ContentView: View {
+	@StateObject private var model = CounterModel()
+
+	var body: some View {
+		VStack(spacing : 12) {
+			Text("Count: \(mode.count)")
+			Button("Increment") { mode.increment() }
+		}
+		.padding()
+	}
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- Note: Platform look: SwiftUI adapts controls to the platform. On iOS, the burron appears as blue text: on macOS, its a bordered push button. The behavior is the same.
+- See iOS style in Xcode: run an iOS app target (iPhone simulator). If you're in a macOS app, and want a text-style button, add `.buttonStyle(.plain)` to the button.
+
+
 #### Run Example in XCode
+##### Standard Workflow (used in this tutorial)
+
+- Every example is organized into three files so you can run it as a small app:
+	1. Demo.swift - the example's main code (view and/or supporting types)
+	2. ContentView.swift - Shows the demo (reference types from `Demo.swift`)
+	3. App.swift - Stable app entry with `WindowGroup { ContentView() }`
+
+- Tip: In your own Xcode project, keep a single `ContentView`. If you already hav one from a previous example, reuse that file and update its boduy for the new demo. Alternatively, create a chooser menu and navigate to uniquely named demo views.
+
+##### Optional: Canvas Preview
+
+- You cna also run any example via Xcode's Canvas Preview without changing your app entry point.
+	1. Create a View File - in Xcode, choose File > New > File... > SwiftUI VIew. Name it (for example, `FrameDemo.swift`) and paste the example view's code into it.
+	2. Add a Preview - Ensure that the file has a preview. Use either a `PreviewProvider` or the `#Preview` macro.
+		- in PreviewProvider.swift
+		`
+		import SwiftUI
+
+		struct FrameDemo_Previews: PreviewProvider {
+			static var previews: some View { FrameDemo() }
+		}
+		`
+
+		- in #Preview.swift
+		`
+		import SwiftUI
+
+		#Preview { FrameDemo() }
+		`
+
+	3. Open the Canvas - With the file selected, choose Editor > Canvas (or click the Canvas button). If you dont see the preview, build the project once.
+	4. Run the Pewview - CLick Resume/Play in the Canvas. Edits to the code will refresh the preview. Use the device picker to switch iPhone/iPad models.
+	5. Interact - Previews are interactive - tap buttons, type into fields etc.
+
+- Note: Troubleshooting: if the Canvas wont load, try a project Build, then Clean Build Folder. Make sure the target platform is iOS and the file import `SwiftUI`.
+- Run on Simulator - you can also run any example on the simulator by temporarily setting `WindowGroup { ExampleView() }` in `App.swift`, or by navigating to the example from a simple in-app menu.
+
 
 
 ### iOS Project Setup
