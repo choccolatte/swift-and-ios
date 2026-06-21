@@ -4203,6 +4203,25 @@ struct MyApp: App {
 
 
 ### iOS Project Setup
+
+- Here, we Create a new SwiftUI in Xcode, confifure signing nad capabilities, and set our deployment targets.
+
+#### Create a New Project in Xcode
+
+- Use the App template, choose Swift and SwiftUI, set your organization identifier (e.g., - `com.example`), and pick a bundle identifier, like `com.example.MyApp`.
+- checklist - 
+	- Product Name, Team Organization Identifier
+	- Interface: SwiftUI; Language: Swift; Use Core Data (optional)
+	- Minumum iOS version (e.g., iOS 15+)
+- Use this checklist to ensure your project is created with the right templates, idenfitiers, and minimum OS version.
+
+#### Run Examples in Xcode
+##### Standard workflow
+##### Optional: Canvas Preview
+#### Project Settings
+
+
+
 ### SwiftUI Layout
 ### SwiftUI Navigation
 ### SwiftUI Data Flow
