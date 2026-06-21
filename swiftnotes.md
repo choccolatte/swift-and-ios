@@ -4217,7 +4217,19 @@ struct MyApp: App {
 
 #### Run Examples in Xcode
 ##### Standard workflow
+
+- Each example is organized into three files, so you can run it as a small app -
+	1. Demo.swift - the example's main code (view and/or supporting types)
+	2. ContentView.swift - Shows the demo (uses types from `Demo.swift`)
+	3. App.swift - Stable entry point with `WindowGroup { ContentView() }`
+
+- Tip: In your own Xcode project, avoid duplicate `ContentView` declarations.
+- Reuse a single `ContentView` and update its body per example, or create a simple chooser that navigates to uniquely named demo views.
+
 ##### Optional: Canvas Preview
+
+- 
+
 #### Project Settings
 
 
