@@ -4228,13 +4228,51 @@ struct MyApp: App {
 
 ##### Optional: Canvas Preview
 
-- 
+- You can also run any example via XCode's Canvas Preview without changing your app entry point.
+	1. Create a SwiftUI View: File -> New -> File... -> SwiftUI View. Paste teh example view code.
+	2. Add a Preview: Use a `PreviewProvider` or the `#Preview` macro.
+
+		- ex. -
+		- in PreviewProvider.swift
+		`
+		import SwiftUI
+
+		struct Demo_Preview: PreviewProvider {
+			static var previews: some View { Demo() }
+		}
+		`
+
+		- in #Preview.swift
+		`
+		import SwiftUI
+
+		#Preview { Demo() }
+		`
+
+	3. Open Canvas: Editor -> Canvas. Build once if the preview is unavailable.
+	4. Run & Interact: Click Resume/Play; Use the device selector to switch models.
+
+- Troubleshooting: If the preview fails to load, Build, then CLean Build Folder.
+- Ensure the target is iOS and the file imports `SwiftUI`.
 
 #### Project Settings
 
+- In the project navigator, select the app target and configure:
+	- Signing & Capabilities - Select your team and enable automatic signing.
+	- Deployment Info - Minimum iOS version, supported orientations.
+	- Bundle Identifier - Matches the one you will register in the App Store Connect.
+
+- Tip: Use `Assets.xcassets` for your app icon and images.
+- Add capabilities (e.g., Push Notifications) here when needed.
 
 
 ### SwiftUI Layout
+
+- Build flexible interfaces with stacks, frames, alignment, and spacing using SwiftUI's layout system.
+
+#### Stacks and Spacing
+#### Frames and Alignment
+
 ### SwiftUI Navigation
 ### SwiftUI Data Flow
 ### SwiftUI Lists & Forms
