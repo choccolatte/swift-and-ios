@@ -4271,7 +4271,131 @@ struct MyApp: App {
 - Build flexible interfaces with stacks, frames, alignment, and spacing using SwiftUI's layout system.
 
 #### Stacks and Spacing
+
+- Use `VStack`, `HStack`, and `ZStack` to arrange views vertically, horizontally,  or in layers.
+- Spacing and alignment are configurable.
+- syntax:
+	- `VStack(alignment: .leading, spacing: 8) { ... }`
+	- `HStack { Text("A"); Spacer(); Text("B") }`
+	- `ZStack { Color.blue; Text("Overlay") }`
+
+- ex - here, this example arranges content using vertical, horizontal, and layered stacks with titles, spacers adn padding:
+- in Demo.swift
+`
+import SwiftUI
+
+struct StackDemo: View {
+	var body: some View {
+		VStack(alignment: .leading, spacing: 12) {
+			Text("Title").font(.title)
+			HStack {
+				Text("Left")
+				Spacer()
+				Text("Right")
+			}
+			ZStack {
+				Color.blue.opacity(0.1)
+				Text("Overlay")
+			}
+		}
+		.padding
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { StackDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
 #### Frames and Alignment
+
+- Adjust size and position with `.frame()`, `.padding()`, and `.alignmentGuide`.
+- syntax:
+	- `.frame(width: 200, height: 100)`
+	- `.frame(maxWidth: .infinity, alignment: .leading)`
+	- `.alignmentGuide(.firstTextBaseline) { d in d[.bottom] }`
+
+- ex. - here, this example demonstrates fixed adn flexible frames, spacers for distribution and baseline alignment for text:
+- in Demo.swift
+`
+import SwiftUI
+
+struct FrameDemo: View{
+	var body: some View {
+		VStack(spacing: 16) {
+			ZStack(alignment: .topLeading) {
+				Color.yellow.opacity(0.2)
+				Text("Top Left").padding(6)
+			}
+			.frame(width: 200, height: 100) // fixed size
+
+			HStack {
+				Text("Left")
+				Spacer()
+				Text("Right")
+			}
+			.frame(maxWidth: .infinity, alignment: .leading) // expand horizontally
+
+			HStack(alignment: .firstTextBaseline, spacing: 8) {
+				Text("Title").font(.title)
+				Text("Aligned baseline")
+				.alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
+			}
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { FrameDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- Tip: Use `Spacer()` to push content apart.
+
+
+### SwiftUI - HStack VStack ZStack
+### SwiftUI - Spacers and Alignment
+### SwiftUI - Frames and Padding
+### SwiftUI - Grids
+### SwiftUI - GeometryReader
+### SwiftUI - Safe Area
+### SwiftUI - Lazy Stacks
+
 
 ### SwiftUI Navigation
 ### SwiftUI Data Flow
