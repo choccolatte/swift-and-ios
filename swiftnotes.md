@@ -4389,7 +4389,185 @@ struct MyApp: App {
 
 
 ### SwiftUI - HStack VStack ZStack
+
+- Arrange views vertically, horizontally, or in layers using `VStack`, `HStack` and `ZStack`.
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct StackDemo: View {
+	var body:  some  View {
+		VStack(spacing: 12) {
+			Text("Title").font(.title)
+			HStack {
+				Text("Left")
+				Spacer()
+				Text("Right")
+			}
+			ZStack {
+				Color.blue.opacity(0.1)
+				Text("Overlay")
+			}
+		}.padding()
+	}
+}
+`
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { StackDemo() }
+}
+`
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+#### Overlays and Alignment
+
+- Layer content with `ZStack` and control placement using `alignment` and `alignmentGuide`.
+- syntax -
+	- `ZStack(alignment: .topLeading) { ... }`
+	- `.alignmentGuide(.top) { d in d[.bottom] }`
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct OverlayDemo: View {
+	var body: some View {
+		ZStack(alignment: .topLeading) {
+			Image(systemName: "rectangle.fill").resizable().foregroundStyle(.blue.opacity(0.15))
+			Text("Badge")
+				.padding(6)
+				.background(.ultraThinMaterial, in: Capsule())
+				.alignmentGuide(.top) { d in d[.bottom] } // custom guide
+		}
+		.frame(width: 220, height: 120)
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentVIew: View {
+	var body: some View { OverlayDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
 ### SwiftUI - Spacers and Alignment
+
+- Use `Spacer()` to distribute content and alignment parameters to control placement.
+
+#### Spacers
+
+- Use `Spacer()` to distribute content and alignment parameters to control placement.
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct SpacersAlignmentDemo: View {
+	var body: some VIew {
+		HStack {
+			Text("Left"); Spacer(); Text("Right")
+		}
+		.frame(maxWidth: .infinity, alignment: .leading)
+		.padding()
+	}
+}
+`
+
+- in ContentVIew.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { SpacersAlignmentDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+#### Vertical Alignment and Guides
+
+- Align text baselines and customize positioning with `alignment` and `alignmentGuide`.
+- syntax  -
+	- `HStack(alignment: .firstTextBaseline) { ... }`
+	- `.alignmentGuide(.firstTextBaseline) { d in d[.bottom] }`
+	- VStack(alignment: .leading) { Spacer() }`
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct AlignmentGuideDemo: View {
+	var body: some View {
+		VStack(alignment: .leading, spacing: 16) {
+			HStack(alignment: .firstTextBaseline, spacing: 8) {
+				Text("Title").font(.title)
+				Text("Aligned").alignmentGuide(.firstTextBaseline) { d in d[.bottom] }
+			}
+			HStack {
+				Text("Left"); Spacer(); Text("Right")
+			}
+		}
+		.padding
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some VIew { AlignmentGuideDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+
 ### SwiftUI - Frames and Padding
 ### SwiftUI - Grids
 ### SwiftUI - GeometryReader
