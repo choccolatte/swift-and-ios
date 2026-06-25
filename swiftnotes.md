@@ -4569,7 +4569,119 @@ struct MyApp: App {
 
 
 ### SwiftUI - Frames and Padding
+
+- with Frames and padding, we control the size and layaout using `.frame()` and spacing using `.padding()`.
+
+#### Fixed Frames
+
+- Use fixed width and height to size content.
+- syntax -
+	- `.frame(width: 160, height: 60)`
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct FramePaddingDemo: View {
+	var body: some View {
+		VStack(spacing: 16) {
+			Text("Fixed size").frame(width: 160, height: 60).background(.blue.opacity(0.1))
+			Text("Max width").frame(maxWidth: .infinity, alignment: .leading).padding(8).background(.green.opacity(0.1))
+		}.padding()
+	}
+}
+`
+
+- in ContentVIew.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { FramesPaddingDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+#### Flexible Frames and Alignment
+
+- Use min/max constraints and alignment to size content responsively.
+- syntax -
+	- `.frame(minWidth: 120, maxWidth: .infinity, alignment: .trailing)`
+	- `.frame(maxHeight: 120)`
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct FlexibleFramesDemo: View {
+	var body: some View {
+		VStack(spacing: 12) {
+			Text("Trailing")
+				.frame(minWidth: 120, maxWidth: .infinity, alignment: .trailing)
+				.padding(8)
+				.background(.gray.opacity(0.1))
+				.cornerRadius(6)
+			Text("Tall block")
+				.frame(maxWidth: .infinity)
+				.frame(maxHeight: 120)
+				.background(.orange.opacity(0.1))
+				.cornerRadius(6)
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { FlexibleFramesDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
 ### SwiftUI - Grids
+
+- Use `LazyVGrid` and `LazyHGrid` to arrange items in flexible grid layouts.
+
+#### Lazy Grids
+
+- Lazy grids are used to display a large numnber of items in a gtid layout.
+- syntax:
+	- `LazyVGrid(columns: columns, spacing: 12)`
+	- `LazyHGrid(rows: rows, spacing: 12)`
+
+- ex -
+- in Demo.swift
+`
+
+`
+
+- in ContentView.swift
+- in App.swift
+
 ### SwiftUI - GeometryReader
 ### SwiftUI - Safe Area
 ### SwiftUI - Lazy Stacks
