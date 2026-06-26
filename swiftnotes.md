@@ -4673,16 +4673,115 @@ struct MyApp: App {
 	- `LazyVGrid(columns: columns, spacing: 12)`
 	- `LazyHGrid(rows: rows, spacing: 12)`
 
-- ex -
+- ex - here, in this example, the grid is created using a `LazyGrid` with two columns, each with a flexible width:
 - in Demo.swift
 `
+import SwiftUI
+
+struct GridDemo: View {
+	let columns = [GridItem(.flexible()), GridItem(.flexible())]
+	var body: some View {
+		LazyGrid(columns: columns, spacing: 12) {
+			ForEach(1...6, id: \.self) { i in 
+				Text("Item \(i)")
+					.frame(maxWidth: .infinity)
+					.paddding(12)
+					.background(.blue.opacity(0.1))
+					.cornerRadius(8)
+			}
+		}.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { GridDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+#### Adaptive Grid
+
+- Use adaptive columns to fit as many items per row as space allows -
+- syntax:
+	- `[GridItem(.adaptive(minimum: 100))]`
+	- `LazyVGrid(columns: columns) { ... }`
+
+- ex. - here, in this example, the grid is created using a `LazyVGrid` with adaptive columns, each with a minimum width of 100 points: 
+- in Demo.swift
+`
+import SwiftUI
+
+struct AdaptiveGridDemo: View {
+	let columns = [GridItem(.adaptive(minimum: 100), spacing: 12)]
+	var body: some View {
+		LazyVGrid(columns: columns, spacing: 12) {
+			ForEach(1...12, id: \.self) { i in 
+				Text("Card \(i)")
+					.frame(maxWidth: .infinity, minHeight: 60)
+					.background(.green.opacity(0.12))
+					.cornerRadius(8)
+			}
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { AdaptiveGridDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+### SwiftUI - GeometryReader
+
+- Read parent size and position to build responsive layouts with `GeometryReader`.
+
+- Use `GeometryReader` to read parent size and position to build responsive layouts.
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
 
 `
 
 - in ContentView.swift
-- in App.swift
+``
 
-### SwiftUI - GeometryReader
+- in App.swift
+``
+
+#### 
+
 ### SwiftUI - Safe Area
 ### SwiftUI - Lazy Stacks
 
