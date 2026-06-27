@@ -4864,21 +4864,241 @@ struct MyApp: App {
 	- View: `.task { await vm.loadFromAPI() }` to kick off the async load
 	- API: `let (data, _) = try await URLSession.shared.data(from: url), JSONDecoder().decode`
 
-- ex. -
+- ex. - here, this example seperates concerns with an API helper and a ViewModel, then loads notes into a SwiftUI List on task:
 - in Demo.swift
-``
+`import SwiftUI
+import Foundation
+
+struct NoteDTO: Decodable, Identifiable { let id: Int; let title: String; let body: String }
+
+enum API { 
+	static func fetchNotes() async throws -> [NoteDTO] {
+		let url = URL(string: "https://jsonplaceholder.com/posts?_limits=3")!
+		let (data, _) = try await URLSession.shared.data(from: url)
+		return try JSONDecoder().decode([NoteDTO].self, from: data)
+	}
+}
+
+@MainActor
+final class NotesViewModel: ObservableObject {
+	@Published var notes: [NoteDTO] = []
+	func loadFromAPI() async {
+		do { notes = try await API.fetchNotes() }
+		catch { print(error) }
+	}
+}
+
+struct NotesView: View {
+	@StateObject private var vm = NotesViewModel()
+	var body: some View {
+		List(vm.notes) { n in Text(n.title) }
+			.task { await vm.loadFromAPI() }
+	}
+}
+`
 
 - in ContentView.swift
-``
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { NotesView() }
+}
+`
 
 - in App.swift
-``
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
 
 #### POST JSON
-- 
+- Send JSON by encoding your payload and setting the request method and headers.
+- syntax -
+	- `var req = URLRequest(url:)`
+	- `req.httpMethod = "POST"`
+	- `req.setValue("application/json", forHTTPHeaderField: "Content-Type")`
+	- `req.httpBody = try JSONEncoder().encode(payload)`
+	- `let (_, resp) = try await URLSession.shared.data(for: req)`
 
-### Persistence
+- ex. - here, this example sends a JSON payload with a POST request and returns the HTTP status code from the response:
+- in Demo.swift
+`
+import SwiftUI
+import Foundation
+
+struct NewTodo: Encodable { let title: String; let completed: Bool }
+
+func createTodo(_ todo: NewTodo) async throws -> Int {
+	let url = URL(string: "https://jsonplaceholder.com/todos")!
+	var req = URLRequest(url: url)
+	req.httpMethod = "POST"
+	req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+	req.httpBody = try JSONEncoder().encode(todo)
+	let (_,  resp) = try await URLSession.shared.data(for: req)
+	return (resp as? HTTPURLResponse)?.statusCode ?? 0
+}
+
+struct NetworkingPostDemo: View {
+	@State private var status: Int? = nil
+	var body: some View {
+		VStack(spacing: 12) {
+			Button("Create Todo" ){
+				Task {
+					do { status = try await createTodo(NewTodo(title: "Demo", completed: false)) }
+					catch { print(error); status = nil }
+				}
+			}
+			if let status { Text("Status: \(status)") }
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { NetworkingPostDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- Tip:  Add `App Transport Security` exceptions in `Info.plist` only when required. Prefer HTTPS.
+
+
+### Persistence (UserDefaults)
+
+- Persist small preferences and settings with UserDefaults, and share values to widgets using App Groups.
+
+#### UserDefaults API
+
+- Store small preferences like flags or last-used values.
+- syntax -
+	- `UserDefaults.standard.set(_:forKey:)`
+	- `.bool(forKey:)`
+	- SwiftUI `@AppStorage("key")`
+
+- ex. -
+- in Demo.swift
+`
+import SwiftUI
+
+struct USerDefaultsDemo: View {
+	@AppStorage("username") private var username = ""
+	var body: some View {
+		VStack(spacing: 12) {
+			Text(username.isEmpty ? "Hello, Guest" : "Hello, " + username)
+			TextField("Username", text: $username)
+				.textFieldStyle(.roundedBorder)
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { UserDefaultsDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- The UserDefaults API provides a simple way  to store small preferences and settings such as flags or last-used values.
+
+- Tip: For larger data or sync, use Core Data or CLoudKit.
+- Avoid storing secrets in UserDefaults.
+
+#### App Group Shared Defaults (Widget Access)
+
+- Share small values between your app and a widget (or extensions) using an App Group suite.
+- syntax -
+	- `UserDefaults(suiteName: "group.id")`
+	- `shared.set(_:forKey:)`
+	- `shared.integer(forKey:)`
+
+- ex. - here, we share a notes count betweeen the app and a widget:
+- in Demo.swift
+`
+import SwiftUI
+import Foundation
+
+struct AppGroupDemo: View {
+	private let suite = UserDefaults(suiteName: "group.com.example.notes")!
+	@State private var count: Int = 0
+	var body: some View {
+		VStack(spacing: 12) {
+			Text("Notes count: \(count)")
+			HStack {
+				Button("Increment") { count += 1; suite.set(count, forKey: "notesCount") }
+				Button("Load") { count = suite.integer(forKey: "notesCount") }
+				Button("Clear") {  suite.removeObject(forKey: "notesCount"); count = 0 }
+			}
+		}
+		.task { count = suite.integer(forKey: "notesCount") }
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some VIew { AppGroupDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App [
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+]
+`
+
 ### Persistence (Core Data)
+
+
+
 ### MVVM Architecture
 ### App Storage & SceneStorage
 ### Testing SwiftUI
