@@ -4799,6 +4799,95 @@ import SwiftUI
 
 
 ## SwiftUI Data & Architecture
+### Networking (URLSession)
+
+- Fetch and send JSON over HTTPS using `URLSession` with `async/await`, and integrate responses into `SwiftUI`.
+
+#### GET Request with async/await
+
+- Use `URLSession.shared.data(from:)` with `async/await` to fetch data.
+- syntax - 
+	- `let (data, response) = try await URLSession.shared.data(from: url)`
+	- decode with `JSONDecoder().decode`
+
+- ex - here, this example fetches a small JSON list with URLSession using async/await and displays it in a SwiftUI List:
+- in Demo.swift
+`
+import SwiftUI
+import Foundation
+
+struct Todo: Decodable, Identifiable { let id: Int; let title: String }
+
+func fetchTodo() async throws -> [Todo] {
+	let url = URL(string: "https://jsonplaceholder.typicode.com/todos?_limit=2)!
+	let (data, _) = try await URLSession.shared.data(from: url)
+	return try JSONDecoder().decode([Todo].self, from:data)
+}
+
+struct NetworkingGetDemo: View {
+	@State private var todos: [Todo] = []
+	var body: some View {
+		List(todos) { t in Text(t.title) }
+			.task {
+				do { todos = try await fetchTodos() } catch { print(error) }
+			}
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { NetworkingGetDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+#### Sample App: Notes (Networking)
+
+- Use `@MainActor class VM: ObservableObject { @Published var items: [T] = []; func loadFromAPI() async { ... } }` to seperate concerns and load data in the background.
+- syntax -
+	- `@MainActor class VM: ObservableObject { @Published var items: [T] = []; func loadFromAPI() async { ... } }`
+	- View: `.task { await vm.loadFromAPI() }` to kick off the async load
+	- API: `let (data, _) = try await URLSession.shared.data(from: url), JSONDecoder().decode`
+
+- ex. -
+- in Demo.swift
+``
+
+- in ContentView.swift
+``
+
+- in App.swift
+``
+
+#### POST JSON
+- 
+
+### Persistence
+### Persistence (Core Data)
+### MVVM Architecture
+### App Storage & SceneStorage
+### Testing SwiftUI
+
+
+
+
 ## iOS Capabilities
+### Privacy & Permissions
+
 ## iOS Quality & Compliance
 ## iOS Release & Distribution
