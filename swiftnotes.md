@@ -5112,7 +5112,7 @@ struct MyApp: App [
 	- `let container = NSPersistentContainer(name: "Model")`
 	- `container.loadPersistentStores`
 
-- ex - 
+- ex - here, in this example, we initialize a persistent container and use `@Environment(\.managedObjectContext)` with `@FetchRequest` to list and add items:
 - in Demo.swift
 `
 import SwiftUI
@@ -5127,16 +5127,111 @@ extension Note {
 	@nonobjc class func fetchRequest() -> NSFetchRequest<Note> { NSFetchRequest<Note> (entityName: "Note")}
 }
 
-struct
+struct PersistenceController {
+	static let shared = PersistenceController()
+	let container: NSPersistenceContainer
+	init() {
+		// Programmatic model so the sample runs without an .xcdatamodeld
+		let model = NSManagedObjectModel()
+		let entity = NSEntityDescription()
+		entity.name = "Note"
+		entity.managedObjectClassName = NSStringFromClass(Note.self)
+		let title = NSAttributeDescription()
+		title.name = "title"
+		title.attributeType = .stringAttributeType
+		title.isOptional = true
+		entity.properties = [title]
+		model.entities = [entity]
+
+		container = NSPersistentContainer(name: "MyModel", managedObjectModel: model)
+		let description = NSPersistentStoreDescription()
+		description.type = NSInMemoryStoreType
+		container.persistentStoreDescriptions = [description]
+		container.loadPersistentStores { _, error in
+			if let error = error { fatalError("Unresolved error: \(error)") }
+		}
+	}
+}
+
+struct BasicCoreDataView: View {
+	@Envirronment(\.managedObjectContext) private var context
+	@FetchRequest(sortDescriptions: []) private var items:  FetchedResults<Note>
+
+	var body: some View {
+		List(items, id: \.objectID) { note in Text(note.title ?? "") }
+			.toolbar { Button("Add") { add() } }
+	}
+
+	private func add() {
+		let i = Note(context: context)
+		i.title = "New"
+		try? context.save()
+	}
+}
 `
 
 - in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { BasicCoreDataView() }
+}
+`
+
 - in App.swift
+`
+import SwiftUI
+import CoreData
+
+@main
+struct MyApp: App {
+	let persistence = PersistenceController.shared
+	var body: some Scene {
+		WindowGroup {
+			ContentView()
+				.environment(\.managedObjectContext, persistence.container.viewContext)
+		}
+	}
+}
+`
+
+- here, the note about .xcdatamodeld is for running this in XCode. It is not relevant for the above example. But if you want to use XCode, you can add a .xcdatamodeld file in your project.
+
 
 #### Sample App: Notes (Core Data)
+
+- This example below demonstrates a more complex setup with multiple entities and relationships.
+- syntax -
+	- `@Environment(\.managedObjectContext)` for the context
+	- `@FetchRequest(sort Descriptors: [NSSortDescriptior(...)])` to query
+	- `context.save(0)` to persist
+
+- ex. -
+- in Demo.swift
+`
+
+`
+
+- in ContentView.swift
+`
+`
+
+- in App.swift
+`
+`
+
+
 #### App Group Shared Store (Widget Access)
 
 ### MVVM Architecture
+
+- Seperate UI from business logic by placing state and operations in a ViewModel observed by your SwiftUI views.
+
+#### Model-View-ViewModel
+
+- 
+
 ### App Storage & SceneStorage
 ### Testing SwiftUI
 
