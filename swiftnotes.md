@@ -5097,7 +5097,44 @@ struct MyApp: App [
 
 ### Persistence (Core Data)
 
+- Model,  store, and query your app data with Core Data using an NSPersistentContainer and SwiftUI integration.
 
+#### What is Core Data?
+
+- Core Data is APple's object graph and persistence framework.
+- It manages models, relationships, and change tracking, and can persist to SQLite under the hood.
+
+#### Basic Setup
+
+- Add Core Data when creating the project, or create a `NSPersistentContainer` manually and pass its `viewCOntext` down to your SwiftUI views via `.environment(\_.managedObjectContext)`.
+- this example here demonstrates a basic setup with a single entity and a list view.
+- syntax -
+	- `let container = NSPersistentContainer(name: "Model")`
+	- `container.loadPersistentStores`
+
+- ex - 
+- in Demo.swift
+`
+import SwiftUI
+import CoreData
+
+@objc(Note)
+class Note: NSManageObject {
+	@NSManaged var title: String?
+}
+
+extension Note {
+	@nonobjc class func fetchRequest() -> NSFetchRequest<Note> { NSFetchRequest<Note> (entityName: "Note")}
+}
+
+struct
+`
+
+- in ContentView.swift
+- in App.swift
+
+#### Sample App: Notes (Core Data)
+#### App Group Shared Store (Widget Access)
 
 ### MVVM Architecture
 ### App Storage & SceneStorage
