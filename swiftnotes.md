@@ -5230,9 +5230,185 @@ struct MyApp: App {
 
 #### Model-View-ViewModel
 
-- 
+- MVVM seperates UI (View) from business logic (ViewModel) and data (Model).
+- the ViewModel is an `ObservableObject` the View observes.
+- syntax -
+	- `class VM: ObservableObject { @Published var state }`
+	- `@StateObject private var vm = VM()`
+	- `List(vm.items) { ... }`
+	- `ObservableObject`: A class that notifies its observers when its state changes.
+	- `@Published`: A property wrapper that publishes changes to a value, notifying observers.
+	- `@StateObject`: A property wrapper that creates a new instance of a class, making it a source of truth for a view.
+
+- ex. - here, this example shows the MVVM flows: a ViewModel exposes state, the View observes it, and triggers loading on appear:
+- in Demo.swift
+`
+import SwiftUI
+
+struct MVVMBasicView: View {
+	@StateObject private var vm = TodoViewModel()
+	var body: some View {
+		List(vm.todos) { t in Text(t.title) }
+			.onAppear { vm.load() }
+	}
+}
+`
+
+- in ViewModel.swift
+`
+import Foundation
+import Combine
+
+struct Todo: Identifiable { let id: Int; let title: String }
+
+final class TodoViewModel: ObservableObject {
+	@Published var todos: [Todo] = []
+	func load() { todos = [Todo(id: 1, title: "Learn MVVM")] }
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { MVVMBasicView() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+#### Sample App: Notes (MVVM)
+
+- ex. - here, this example a simple Notes model and ViewModel, then renders a list and loads mock data when the view appears:
+- in Demo.swift
+`
+import SwiftUI
+
+struct NotesMVVMView: View {
+	@StateObject private var vm = NotesViewModel()
+	var body: some View {
+		List(vm.notes) { n in 
+			VStack(alignment: .leading) {
+				Text(n.title).font(.headline)
+				Text(n.body).font(.subheadline)
+			}
+		}
+		.onAppear { vm.loadMock() }
+	}
+}
+`
+
+- in ViewModel.swift
+`
+import Foundation
+import Combine
+
+struct Note: Identifiable { let id: UIID; var title: String; var body: String }
+
+final class NotesViewModel: ObservableObject {
+	@Published var notes: [Note] = []
+	func loadMock() {
+		notes = [
+			Note(id; UIID(), title: "First", body: "Welcome to your Notes"),
+			Note(id: UIID(), title: "Second", body: "Try editing..."),
+		]
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { NotesMVVMView() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body:  some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+#### App Group
+
+- Use an App Group to share small values (like counts, flags, timestamps) between your app and its Widget.
+- the hook below writes `notesCount` whenever the ViewModel's `notes` changes.
+- How to usse it?:
+	- Enable the same App Group on both the app target and the widget target (e.g., `group.com.example.notes`).
+	- Keep `updateSharedNotesCount` writing to that group ID; the `didSet` observer writes the new count on every change.
+	- Read teh value from the widget using the same `suiteName` (see the snippet below):
+
+##### App Group hook (Widget Count)
+
+- ex. -
+- in NotesViewModel.swift
+`
+import Combine
+
+func updateSharedNotesCount(_ count: Int) {
+	let defaults = UserDefaults(suiteName: "group.com.example.notes")
+	defaults?.set(count, forKey: "notesCount")
+}
+
+class NotesViewModel: ObservableObject {
+	@Published var notes: [Note] = [] {
+		didSet { updateSharedNotesCount(notes.count) }
+	}
+
+	func add(title: String, body: String) {
+		notes.append(.init(id: UUID(), title: title, body: body))
+	}
+
+	func delete(at offsets: IndexSet) {
+		notes.remove(atOffsets: offsets)
+	}
+}
+`
+
+- in WidgetRead.swift
+`
+import SwiftUI
+
+// Option A: Direct read via UserDefaults (e.g. from a TimelineProvider)
+let defaults = userDefaults(suiteName: "group.com.example.notes")
+let count = defaults?.integer(forKey: "notesCount") ?? 0
+
+// option B: @AppStorage with a custom store (usable in a Widget view)
+struct WidgetCountView: View {
+	@AppStorage("notesCount", store: UserDefaults(suiteName: "group.com.example.notes"))
+	private var notesCount: Int = 0
+
+	var body: some View {
+		Text("Notes: \(notesCount)")
+	}
+}
+`
+
+- Tip: Inject dependencies (e.g., networking clients) into your ViewModel to keep views simple and testable.
+
 
 ### App Storage & SceneStorage
+
+
 ### Testing SwiftUI
 
 
