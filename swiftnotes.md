@@ -5406,8 +5406,57 @@ struct WidgetCountView: View {
 - Tip: Inject dependencies (e.g., networking clients) into your ViewModel to keep views simple and testable.
 
 
-### App Storage & SceneStorage
+### AppStorage & SceneStorage
 
+- Persist small values with `@AppStorage` and view-state per scene with `@SceneStorage`.
+
+#### @AppStorage (User Defaults)
+
+- Bind a value directly to `UserDefaults` so changes persist across app launches.
+- syntax - `@AppStorage("key") var value: T = default`
+
+- ex - here, this example stores the username in `UserDefaults` and keeps the UI in sync:
+- in Demo.swift
+`
+import SwiftUI
+
+struct AppStorageDemo: View {
+	@AppStorage("username") private var username = ""
+	va body: some View {
+		VStack(spacing: 12) {
+			Text("Hello, \(username.isEmpty ? "Guest" : username)" )
+			TestField("Username", text: $username)
+				.textFieldStyle(.roundedBorder)
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { AppStorageDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+#### @SceneStorage (Per-Scene UI State)
+
+- 
 
 ### Testing SwiftUI
 
