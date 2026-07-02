@@ -5456,11 +5456,198 @@ struct MyApp: App {
 
 #### @SceneStorage (Per-Scene UI State)
 
-- 
+- Preserve transient UI date (like a draft) per window/scene; state is restored when the scene returns.
+- syntax - `@SceneStorage("key") var value: T`
+
+- ex. - here, this example keeps a text draft per scene so switching windows preserves the content independently:
+- in Demo.swift
+`
+import SwiftUI
+
+struct SceneStorageDemo: View {
+	@SceneStorage("draft_note") private var draft = ""
+	var body: some View {
+		VStack(alignment: .leading, spacing: 8) {
+			Text("Draft:")
+			TextEditor(text: $draft)
+				.frame(minHeight: 120)
+				.overlay(RoundedRectangle(cornerRadius: 6).stroke(.secondary))
+		}
+		.padding()
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { SceneStorageDemo() }
+}
+`
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene {
+		WindowGroup { ContentView() }
+	}
+}
+`
+
+- Tip; Use `@AppStorage` for preferences and `SceneStorage` for transient UI State.
+
+
 
 ### Testing SwiftUI
 
+- Write Unit Tests for view models and UI tests for SwiftUI views to validate behavior and flows.
 
+#### Unit Test a ViewModel
+
+- Place business logic in a ViewModel and verify it using `XCTestCase`.
+- syntax -
+	- `final class MyTests: XCTestCase { ... }`
+	- assertions like `XCTAsserteEqual, XCTAssertTrue`
+
+- ex. - this example here, verifies that calling `increment()` updates the published count: 
+- in Demo.swift
+`
+import SwiftUI
+import Combine
+
+final class CounterViewModel: ObservableObject {
+	@Published private(set) var count = 0
+	func increment() { count += 1 }
+}
+
+struct CounterView: View {
+	@StateObject private var vm = CounterViewModel()
+	var body: some View {
+		VStack(spacing: 12) {
+			Text("Count: \(vm.count)")
+			Button("Increment") { vm.increment() }
+		}
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { CounterView() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+- in CounterViewModelTests.swift
+`
+import XCTest
+
+final class CounterViewModelTests: XCTestCase {
+	func testIncrement() {
+		let vm = CounterViewModel()
+		vm.increment()
+		XCTAssertEqual(vm.count, 1)
+	}
+}
+`
+
+#### Prerequisites (UI Testing Target)
+
+- Add a UI Testing Bundle target (File -> New -> Target -> UI Testing Bundle).
+- Prefer locating elements by accessibility identifiers rather than visible text.
+- Pass launch arguments and environment to control app state for tests (eg. reset data, use fakes).
+
+#### UI Test a SwiftUI View
+
+- Drive the app with `XCUIApplication` and locate elements by accessibility.
+- syntax - 
+	- `let app = XCUIApplication(); app.launch()`
+	- `app.buttons["Label"].tap()`
+
+- ex. - here, this example launches the app, taps the button, and asserts the label exists via its accessibility identifier: 
+- in Demo.swift
+`
+import SwiftUI
+
+struct UITestDemo: View {
+	@State private var count = 0
+	var body: some View {
+		VStack(spacing: 12) {
+			Text("Count: \(count)").accessibilityIdentifier("countLabel")
+			Button("Increment") { count += 1 }
+				.accessibilityIdentifier("incrementButton")
+		}
+	}
+}
+`
+
+- in ContentView.swift
+`
+import SwiftUI
+
+struct ContentView: View {
+	var body: some View { UITestDemo() }
+}
+`
+
+- in App.swift
+`
+import SwiftUI
+
+@main
+struct MyApp: App {
+	init() {
+		let args = ProcessInfo.processInfo.arguments
+		let env = ProcessInfo.processInfo.environment
+		if args.contains("-ui-testing") || env["UITEST_RESET"] == "1" {
+			// Reset state, use mock stores/services, disable animations, etc.
+			// UIView.setAnimationsEnabled(false) can be used where applicable
+		}
+	}
+	var body: some Scene { WindowGroup { ContentView() } }
+}
+`
+
+- in MyUITests.swift
+`
+import XCTest
+
+final class MyUITests: XCTestCase {
+	func testIncrementButton() {
+		let app = XCUIApplication()
+		app.launchArguments = ["-ui-testing"]
+		app.launchEnvironment = ["UITEST_RESET": "1"]
+		app.launch()
+
+		let button = app.button["incrementButton"]
+		XCTAssertTrue(button.waitForExistence(timeout: 2))
+		button.tap()
+
+		let label = app.staticTexts["countLabel"]
+		XCTAssertTrue(label.waitForExistence(timeout: 2))
+		XCTAssertTrue(label.label.contains("Count: 1"))
+	}
+}
+`
+
+- Tip: Keep logic in view models for easier unit testing; use UI tests for navigation and interaction flows.
+- Use `waitForExistence` to make tests more reliable and pass launch flags to set deterministic state.
 
 
 ## iOS Capabilities
